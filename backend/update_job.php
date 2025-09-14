@@ -6,7 +6,6 @@ require_once 'database.php';
 $response = ['success' => false];
 
 try {
-    // Authentication & Role Check
     if (!isset($_SESSION['user_id']) || !in_array('employer', $_SESSION['roles'] ?? [])) {
         throw new Exception("Access Denied.");
     }
@@ -14,12 +13,10 @@ try {
 
     $data = json_decode(file_get_contents('php://input'), true);
 
-    // Validate required fields
     if (empty($data['job_id']) || empty($data['job_title']) || empty($data['company_name']) || empty($data['location'])) {
         throw new Exception("Required fields (Job Title, Company Name, Location) are missing.");
     }
 
-    // Assign all variables from the form data, handling potential nulls
     $job_id = (int)$data['job_id'];
     $job_title = trim($data['job_title']);
     $company_name = trim($data['company_name']);
@@ -42,7 +39,6 @@ try {
         throw new Exception("Database connection failed.");
     }
 
-    // UPDATED: Query now includes all the columns from your table
     $stmt = $conn->prepare("
         UPDATE jobs 
         SET 
@@ -54,7 +50,6 @@ try {
             id = ? AND employer_id = ?
     ");
     
-    // UPDATED: Bind parameters now matches all columns (s = string, i = integer)
     $stmt->bind_param(
         "sssssisiiisssssii",
         $job_title, $company_name, $job_category, $location, $job_type,

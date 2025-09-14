@@ -1,17 +1,14 @@
 <?php
 require_once 'database.php';
 
-// Set the header to output JSON
 header('Content-Type: application/json');
 
-// Set the timezone to India Standard Time
 date_default_timezone_set('Asia/Kolkata');
 
-// Get the job ID from the URL parameter
 $job_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($job_id <= 0) {
-    http_response_code(400); // Bad Request
+    http_response_code(400); 
     echo json_encode(['error' => 'Invalid job ID provided.']);
     exit;
 }
@@ -21,7 +18,6 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 try {
     $conn = new mysqli($servername, $username, $password, $dbname);
 
-    // Prepare a statement to prevent SQL injection, now selecting all new columns
     $stmt = $conn->prepare("SELECT * FROM jobs WHERE id = ?");
     $stmt->bind_param("i", $job_id);
     $stmt->execute();
@@ -30,14 +26,13 @@ try {
     if ($result->num_rows > 0) {
         $job = $result->fetch_assoc();
         
-        // Format the data for consistency with the frontend
         $job['tags'] = !empty($job['skills']) ? array_map('trim', explode(',', $job['skills'])) : [];
         $job['salary'] = '₹' . $job['salary_min'] . ' - ₹' . $job['salary_max'] . ' ' . $job['salary_unit'];
         $job['posted'] = time_ago($job['posted_at']);
         
         echo json_encode($job);
     } else {
-        http_response_code(404); // Not Found
+        http_response_code(404); 
         echo json_encode(['error' => 'Job not found.']);
     }
 
@@ -45,11 +40,10 @@ try {
     $conn->close();
 
 } catch (Exception $e) {
-    http_response_code(500); // Internal Server Error
+    http_response_code(500); 
     echo json_encode(['error' => "Server Error: " . $e->getMessage()]);
 }
 
-// Helper function to create a "time ago" string
 function time_ago($timestamp) {
     $time_ago = strtotime($timestamp);
     $current_time = time();

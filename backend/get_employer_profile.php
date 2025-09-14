@@ -10,7 +10,6 @@ $response = [
 ];
 
 try {
-    // --- AUTHENTICATION & ROLE CHECK ---
     if (!isset($_SESSION['user_id']) || !in_array('employer', $_SESSION['roles'] ?? [])) {
         throw new Exception("Access Denied. Employer account required.");
     }
@@ -18,7 +17,6 @@ try {
 
     $conn = new mysqli($servername, $username, $password, $dbname);
 
-    // --- GET EMPLOYER DETAILS ---
     $stmt_user = $conn->prepare("SELECT full_name, email FROM users WHERE id = ?");
     $stmt_user->bind_param("i", $employer_id);
     $stmt_user->execute();
@@ -28,7 +26,6 @@ try {
     }
     $stmt_user->close();
 
-    // --- GET POSTED JOBS WITH APPLICATION COUNT ---
     $stmt_jobs = $conn->prepare("
         SELECT 
             j.id,
@@ -53,7 +50,7 @@ try {
     $conn->close();
 
 } catch (Exception $e) {
-    http_response_code(403); // Forbidden
+    http_response_code(403); 
     $response['message'] = $e->getMessage();
 }
 

@@ -6,7 +6,6 @@ require_once 'database.php';
 $response = ['success' => false];
 
 try {
-    // Authentication & Role Check
     if (!isset($_SESSION['user_id']) || !in_array('employer', $_SESSION['roles'] ?? [])) {
         throw new Exception("Access Denied.");
     }
@@ -22,7 +21,6 @@ try {
         throw new Exception("Database connection failed.");
     }
 
-    // UPDATED: Selecting all the columns that exist in your table structure.
     $stmt = $conn->prepare("
         SELECT 
             job_title, job_category, location, job_type, experience_level, 

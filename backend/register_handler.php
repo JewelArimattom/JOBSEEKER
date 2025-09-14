@@ -48,7 +48,6 @@ try {
             throw new Exception("Invalid email format.");
         }
 
-        // Check if user already exists
         $stmt_check = $conn->prepare("SELECT id FROM users WHERE email = ?");
         $stmt_check->bind_param("s", $email);
         $stmt_check->execute();
@@ -58,27 +57,22 @@ try {
         }
         $stmt_check->close();
 
-        // Start transaction
         $conn->begin_transaction();
 
-        // Insert into users table
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         $stmt_user = $conn->prepare("INSERT INTO users (full_name, email, password) VALUES (?, ?, ?)");
         $stmt_user->bind_param("sss", $full_name, $email, $hashed_password);
         $stmt_user->execute();
-        $user_id = $conn->insert_id; // Get the ID of the new user
+        $user_id = $conn->insert_id; 
         $stmt_user->close();
 
-        // Get the role ID
-        $role_id = ($user_type === 'employer') ? 2 : 1; // 1 for jobseeker, 2 for employer
+        $role_id = ($user_type === 'employer') ? 2 : 1; 
 
-        // Insert into user_roles table
         $stmt_role = $conn->prepare("INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)");
         $stmt_role->bind_param("ii", $user_id, $role_id);
         $stmt_role->execute();
         $stmt_role->close();
 
-        // Commit the transaction
         $conn->commit();
 
         show_message(
@@ -90,7 +84,7 @@ try {
 
 } catch (Exception $e) {
     if (isset($conn) && $conn->ping()) {
-        $conn->rollback(); // Rollback transaction on error
+        $conn->rollback();
     }
     show_message(
         "Registration Failed",

@@ -1,9 +1,8 @@
 <?php
-session_start(); // Start the session at the very beginning
+session_start(); 
 require_once 'database.php';
 
 function show_error_message($message) {
-    // Using heredoc for cleaner HTML without escaping quotes
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -46,24 +45,20 @@ HTML;
 }
 
 try {
-    // Log the current script path and included file path
     error_log("Current script path: " . __FILE__);
     error_log("Database include path: " . realpath('database.php'));
     
-    // Check if database variables are set
     if (!isset($servername) || !isset($username) || !isset($password) || !isset($dbname)) {
         error_log("Database variables not set. Contents of database.php:");
         error_log(file_get_contents('database.php'));
         throw new Exception("Database configuration not loaded properly. Check database.php");
     }
     
-    // Log database connection attempt
     error_log("Attempting database connection with:");
     error_log("Server: " . $servername);
     error_log("Username: " . $username);
     error_log("Database: " . $dbname);
     
-    // Test database connection with error logging
     $conn = new mysqli($servername, $username, $password, $dbname);
     if ($conn->connect_error) {
         error_log("Database connection failed: " . $conn->connect_error);
@@ -79,7 +74,6 @@ try {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        // Prepare statement to find user by email
         $stmt = $conn->prepare("SELECT id, full_name, email, password FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -88,9 +82,7 @@ try {
         if ($result->num_rows === 1) {
             $user = $result->fetch_assoc();
 
-            // Verify the password
             if (password_verify($password, $user['password'])) {
-                // Password is correct, now get roles
                 $stmt_roles = $conn->prepare(
                     "SELECT r.name FROM roles r JOIN user_roles ur ON r.id = ur.role_id WHERE ur.user_id = ?"
                 );
@@ -103,21 +95,17 @@ try {
                     $roles[] = $row['name'];
                 }
                 
-                // Clear any existing session data
                 session_unset();
                 
-                // Store user data in session
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['full_name'] = $user['full_name'];
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['roles'] = $roles;
                 $_SESSION['loggedin'] = true;
                 
-                // Ensure session is written
                 session_write_close();
                 session_start();
 
-                // Log the redirect path
                 $redirect_path = realpath(__DIR__ . '/../index.html');
                 error_log("Attempting to redirect to: " . $redirect_path);
                 if (!file_exists($redirect_path)) {

@@ -12,8 +12,7 @@ if (!isset($_SESSION['user_id'])) {
 $current_user_id = $_SESSION['user_id'];
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// This query finds all unique users the current user has talked to,
-// gets the last message, and orders by the most recent conversation.
+
 $sql = "
     SELECT
         u.id as contact_id,
@@ -44,7 +43,6 @@ $conversations = [];
 while ($row = $result->fetch_assoc()) {
     if (empty($row['last_message_timestamp'])) continue;
 
-    // Format the timestamp for a user-friendly display
     $date = new DateTime($row['last_message_timestamp']);
     $now = new DateTime();
     $interval = $now->diff($date);
@@ -57,7 +55,6 @@ while ($row = $result->fetch_assoc()) {
         $row['timestamp_formatted'] = $date->format('M d');
     }
     
-    // Create a placeholder avatar based on the user's initial
     $row['avatar'] = 'https://placehold.co/100x100/764ba2/ffffff?text=' . strtoupper(substr($row['contact_name'], 0, 1));
 
     $conversations[] = $row;

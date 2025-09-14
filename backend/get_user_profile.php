@@ -3,7 +3,6 @@ session_start();
 header('Content-Type: application/json');
 require_once 'database.php';
 
-// Default response structure
 $response = [
     'success' => false,
     'user' => null,
@@ -12,19 +11,16 @@ $response = [
 ];
 
 try {
-    // Check for user authentication
     if (!isset($_SESSION['user_id'])) {
         throw new Exception("User not authenticated. Please log in.");
     }
     $user_id = (int)$_SESSION['user_id'];
 
-    // Establish database connection
     $conn = new mysqli($servername, $username, $password, $dbname);
     if ($conn->connect_error) {
         throw new Exception("Database connection failed: " . $conn->connect_error);
     }
 
-    // --- Get User Details ---
     $stmt_user = $conn->prepare("SELECT id, full_name, email FROM users WHERE id = ?");
     $stmt_user->bind_param("i", $user_id);
     $stmt_user->execute();
@@ -36,8 +32,7 @@ try {
     }
     $stmt_user->close();
 
-    // --- Get Applied Jobs (Corrected Query) ---
-    // This query now uses the exact column names required by the HTML front-end.
+    
     $stmt_apps = $conn->prepare("
         SELECT 
             j.job_title,
@@ -63,11 +58,9 @@ try {
     $conn->close();
 
 } catch (Exception $e) {
-    // If any error occurs, capture the message
     http_response_code(400);
     $response['message'] = $e->getMessage();
 }
 
-// Send the final JSON response
 echo json_encode($response);
 ?>

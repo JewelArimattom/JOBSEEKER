@@ -1,11 +1,9 @@
 <?php
 
-// Configure session settings before starting the session
 ini_set('session.cookie_httponly', 1);
 ini_set('session.use_only_cookies', 1);
-ini_set('session.cookie_secure', isset($_SERVER['HTTPS'])); // Secure in HTTPS
+ini_set('session.cookie_secure', isset($_SERVER['HTTPS']));
 
-// Set session cookie path to the root of your application
 $path = dirname(dirname($_SERVER['PHP_SELF']));
 session_set_cookie_params([
     'lifetime' => 0,
@@ -17,9 +15,8 @@ session_set_cookie_params([
 
 session_start();
 header('Content-Type: application/json');
-require_once 'database.php'; // Assuming this contains your DB credentials
+require_once 'database.php'; 
 
-// Response structure
 $response = [
     'success' => false,
     'user' => null,
@@ -32,13 +29,11 @@ try {
     }
     $user_id = (int)$_SESSION['user_id'];
 
-    // Assuming your database.php provides $servername, $username, $password, $dbname
     $conn = new mysqli($servername, $username, $password, $dbname);
     if ($conn->connect_error) {
         throw new Exception("Database connection failed: " . $conn->connect_error);
     }
 
-    // --- GET USER DETAILS ---
     $stmt_user = $conn->prepare("SELECT full_name, email FROM users WHERE id = ?");
     $stmt_user->bind_param("i", $user_id);
     $stmt_user->execute();
@@ -48,8 +43,7 @@ try {
     }
     $stmt_user->close();
 
-    // --- GET APPLIED JOBS ---
-    // The query is corrected here to include the application ID
+   
     $stmt_apps = $conn->prepare("
         SELECT 
             a.id AS application_id, -- <<< THE CRITICAL FIX IS HERE
