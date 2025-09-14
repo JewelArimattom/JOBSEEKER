@@ -142,6 +142,7 @@
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         // --- Interactive Dot Grid Effect ---
+        // ... (This section is unchanged) ...
         const canvas = document.getElementById('dot-grid-canvas');
         if (canvas) {
             const ctx = canvas.getContext('2d');
@@ -208,6 +209,7 @@
         const navLinksContainer = document.getElementById('nav-links');
 
         async function updateAuthState() {
+            // ... (This section is unchanged) ...
             try {
                 const response = await fetch('../backend/check_auth.php');
                 const authData = await response.json();
@@ -242,6 +244,7 @@
         }
 
         function addDropdownListeners() {
+            // ... (This section is unchanged) ...
             const menuButton = document.getElementById('profile-menu-button');
             const dropdown = document.getElementById('profile-dropdown');
             if (menuButton && dropdown) {
@@ -278,6 +281,7 @@
 
                 container.innerHTML = '';
                 data.posted_jobs.forEach(job => {
+                    // --- CARD TEMPLATE MODIFIED ---
                     const card = `
                     <div class="content-card p-6">
                         <h3 class="font-bold text-slate-100 text-lg">${job.job_title}</h3>
@@ -286,8 +290,13 @@
                             <p><strong class="text-slate-500">Posted:</strong> ${job.posted_date_formatted}</p>
                             <p><strong class="text-slate-500">Applications:</strong> <span class="font-bold text-indigo-300 text-base">${job.application_count}</span></p>
                         </div>
-                        <div class="mt-4 pt-4 border-t border-slate-700">
-                            <a href="/CareerBridge/frontend/components/view_applications.html?job_id=${job.id}" class="text-indigo-400 hover:text-indigo-300 font-semibold text-sm">View Applications <i class="fas fa-arrow-right ml-1"></i></a>
+                        <div class="mt-4 pt-4 border-t border-slate-700 flex justify-between items-center">
+                            <a href="/CareerBridge/frontend/components/view_applications.html?job_id=${job.id}" class="text-indigo-400 hover:text-indigo-300 font-semibold text-sm">
+                                View Applications <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                            <a href="/CareerBridge/frontend/components/edit-job.html?job_id=${job.id}" class="text-slate-400 hover:text-white font-semibold text-sm">
+                                <i class="fas fa-pencil-alt mr-1"></i> Edit
+                            </a>
                         </div>
                     </div>`;
                     container.insertAdjacentHTML('beforeend', card);

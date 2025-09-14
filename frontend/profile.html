@@ -315,12 +315,19 @@
                     const statusClass = { viewed: 'status-viewed', rejected: 'status-rejected' }[job.status.toLowerCase()] || 'status-applied';
                     const jobHtml = `
                         <div class="bg-slate-700/50 p-4 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                            <div>
+                            <div class="flex-grow">
                                 <h4 class="font-bold text-slate-100">${job.title}</h4>
                                 <p class="text-sm text-slate-300">${job.company} - ${job.location}</p>
                                 <p class="text-xs text-slate-500 mt-1">Applied on: ${job.application_date_formatted}</p>
                             </div>
-                            <div class="flex-shrink-0"><span class="status-badge ${statusClass}">${job.status}</span></div>
+                            <div class="flex items-center gap-4 mt-3 sm:mt-0 flex-shrink-0">
+                                <span class="status-badge ${statusClass}">${job.status}</span>
+                                <a href="/careerbridge/frontend/components/application_details.html?id=${job.application_id}" 
+                                   class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
+                                   title="View your submitted application">
+                                   View Application
+                                </a>
+                            </div>
                         </div>`;
                     jobsContainer.insertAdjacentHTML('beforeend', jobHtml);
                 });

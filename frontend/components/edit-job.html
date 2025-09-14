@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Job - CareerBridge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; }
+        .nav-blur { backdrop-filter: blur(16px); background: rgba(15, 23, 42, 0.8); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .gradient-text { background: linear-gradient(135deg, #a7b2f5 0%, #cda3f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .form-input { background-color: #1e293b; border: 1px solid #334155; color: #f1f5f9; }
+        .form-input:focus { border-color: #667eea; outline: none; box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3); }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transition: all 0.3s ease; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3); }
+    </style>
+</head>
+<body class="text-slate-200">
+    <nav class="sticky top-0 left-0 right-0 z-50 nav-blur">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="/careerbridge/index.html" class="text-2xl font-black gradient-text">CareerBridge</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="py-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <header class="mb-8">
+                <h1 class="text-4xl font-black text-slate-100">Edit Job Posting</h1>
+                <p class="text-slate-400 mt-2">Update the details for your job listing below.</p>
+            </header>
+            
+            <div id="form-container" class="bg-slate-800 p-8 rounded-2xl border border-slate-700">
+                <form id="edit-job-form">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="md:col-span-2">
+                            <label for="job_title" class="block mb-2 text-sm font-medium text-slate-300">Job Title</label>
+                            <input type="text" id="job_title" name="job_title" class="form-input w-full p-3 rounded-lg" required>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="company_name" class="block mb-2 text-sm font-medium text-slate-300">Company Name</label>
+                            <input type="text" id="company_name" name="company_name" class="form-input w-full p-3 rounded-lg" required>
+                        </div>
+                        <div>
+                            <label for="job_category" class="block mb-2 text-sm font-medium text-slate-300">Job Category (e.g., IT, Marketing)</label>
+                            <input type="text" id="job_category" name="job_category" class="form-input w-full p-3 rounded-lg">
+                        </div>
+                        <div>
+                            <label for="location" class="block mb-2 text-sm font-medium text-slate-300">Location</label>
+                            <input type="text" id="location" name="location" class="form-input w-full p-3 rounded-lg" required>
+                        </div>
+                         <div>
+                            <label for="job_type" class="block mb-2 text-sm font-medium text-slate-300">Job Type</label>
+                            <select id="job_type" name="job_type" class="form-input w-full p-3 rounded-lg">
+                                <option>Full-time</option><option>Part-time</option><option>Contract</option><option>Internship</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="experience_level" class="block mb-2 text-sm font-medium text-slate-300">Experience Level</label>
+                            <select id="experience_level" name="experience_level" class="form-input w-full p-3 rounded-lg">
+                                <option>Entry-level</option><option>Mid-level</option><option>Senior-level</option><option>Intern</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 md:col-span-2">
+                            <div>
+                                <label for="salary_min" class="block mb-2 text-sm font-medium text-slate-300">Min Salary</label>
+                                <input type="number" id="salary_min" name="salary_min" class="form-input w-full p-3 rounded-lg" placeholder="e.g., 800000">
+                            </div>
+                            <div>
+                                <label for="salary_max" class="block mb-2 text-sm font-medium text-slate-300">Max Salary</label>
+                                <input type="number" id="salary_max" name="salary_max" class="form-input w-full p-3 rounded-lg" placeholder="e.g., 1200000">
+                            </div>
+                             <div>
+                                <label for="salary_unit" class="block mb-2 text-sm font-medium text-slate-300">Salary Unit</label>
+                                <select id="salary_unit" name="salary_unit" class="form-input w-full p-3 rounded-lg">
+                                    <option>Per Year</option><option>Per Month</option><option>Per Hour</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="openings" class="block mb-2 text-sm font-medium text-slate-300">Number of Openings</label>
+                            <input type="number" id="openings" name="openings" class="form-input w-full p-3 rounded-lg" value="1">
+                        </div>
+                         <div>
+                            <label for="application_deadline" class="block mb-2 text-sm font-medium text-slate-300">Application Deadline</label>
+                            <input type="date" id="application_deadline" name="application_deadline" class="form-input w-full p-3 rounded-lg">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="skills" class="block mb-2 text-sm font-medium text-slate-300">Skills (comma-separated)</label>
+                            <input type="text" id="skills" name="skills" class="form-input w-full p-3 rounded-lg">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="description" class="block mb-2 text-sm font-medium text-slate-300">Job Description</label>
+                            <textarea id="description" name="description" rows="8" class="form-input w-full p-3 rounded-lg"></textarea>
+                        </div>
+                         <div class="md:col-span-2 border-t border-slate-700 pt-6">
+                             <h3 class="text-lg font-semibold text-slate-100 mb-4">Recruiter Information</h3>
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                 <div>
+                                     <label for="recruiter_name" class="block mb-2 text-sm font-medium text-slate-300">Recruiter Name</label>
+                                     <input type="text" id="recruiter_name" name="recruiter_name" class="form-input w-full p-3 rounded-lg">
+                                 </div>
+                                  <div>
+                                     <label for="recruiter_email" class="block mb-2 text-sm font-medium text-slate-300">Recruiter Email</label>
+                                     <input type="email" id="recruiter_email" name="recruiter_email" class="form-input w-full p-3 rounded-lg">
+                                 </div>
+                             </div>
+                         </div>
+                    </div>
+                    <div class="mt-8">
+                        <button type="submit" class="btn-primary text-white font-bold px-8 py-3 rounded-lg w-full">Save Changes</button>
+                    </div>
+                </form>
+                <div id="feedback-message" class="mt-4 text-center"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('edit-job-form');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const urlParams = new URLSearchParams(window.location.search);
+        const jobId = urlParams.get('job_id');
+
+        async function populateForm() {
+            if (!jobId) {
+                feedbackMessage.innerHTML = `<p class="text-red-400">Error: No Job ID provided.</p>`;
+                return;
+            }
+            try {
+                const response = await fetch(`../../backend/get_job_for_edit.php?job_id=${jobId}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const job = data.job;
+                    // JAVASCRIPT UPDATED to populate all new fields from your table
+                    document.getElementById('job_title').value = job.job_title || '';
+                    document.getElementById('company_name').value = job.company_name || '';
+                    document.getElementById('job_category').value = job.job_category || '';
+                    document.getElementById('location').value = job.location || '';
+                    document.getElementById('job_type').value = job.job_type || 'Full-time';
+                    document.getElementById('experience_level').value = job.experience_level || 'Entry-level';
+                    document.getElementById('salary_min').value = job.salary_min || '';
+                    document.getElementById('salary_max').value = job.salary_max || '';
+                    document.getElementById('salary_unit').value = job.salary_unit || 'Per Year';
+                    document.getElementById('openings').value = job.openings || 1;
+                    document.getElementById('application_deadline').value = job.application_deadline || '';
+                    document.getElementById('skills').value = job.skills || '';
+                    document.getElementById('description').value = job.description || '';
+                    document.getElementById('recruiter_name').value = job.recruiter_name || '';
+                    document.getElementById('recruiter_email').value = job.recruiter_email || '';
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                feedbackMessage.innerHTML = `<p class="text-red-400">Error loading job data: ${error.message}</p>`;
+            }
+        }
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            feedbackMessage.textContent = 'Saving...';
+            
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            data.job_id = jobId;
+
+            try {
+                const response = await fetch('../../backend/update_job.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    feedbackMessage.innerHTML = `<p class="text-green-400">Job updated successfully! Redirecting...</p>`;
+                    setTimeout(() => {
+                        window.location.href = 'employer_profile.html';
+                    }, 2000);
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                feedbackMessage.innerHTML = `<p class="text-red-400">Error updating job: ${error.message}</p>`;
+            }
+        });
+
+        populateForm();
+    });
+    </script>
+</body>
+</html>
