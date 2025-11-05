@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Details - CareerBridge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #020617; /* bg-slate-950 */
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main {
+            flex-grow: 1;
+        }
+        .gradient-text { background: linear-gradient(135deg, #a7b2f5 0%, #cda3f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .nav-blur { 
+            backdrop-filter: blur(20px); 
+            background: rgba(15, 23, 42, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.8); /* bg-slate-800 with alpha */
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .detail-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #94a3b8; /* text-slate-400 */
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .detail-value {
+            font-size: 1rem;
+            color: #f1f5f9; /* text-slate-100 */
+        }
+        .status-badge { padding: 4px 12px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; display: inline-block; }
+        .status-applied { background-color: rgba(99, 102, 241, 0.15); color: #a7b2f5; }
+        .status-viewed { background-color: rgba(59, 130, 246, 0.15); color: #93c5fd; }
+        .status-rejected { background-color: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <nav class="sticky top-0 left-0 right-0 z-50 nav-blur">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <a href="../index.html" class="text-2xl font-black gradient-text">CareerBridge</a>
+                    <div class="hidden md:block">
+                        <div id="nav-links" class="flex items-center space-x-8"></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main class="py-12">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <header class="mb-8 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                    <h1 class="text-4xl font-black text-slate-100">My Application for <span id="job-title-header" class="gradient-text">...</span></h1>
+                    <a href="#" id="view-job-btn" class="text-white bg-indigo-600 hover:bg-indigo-700 font-semibold rounded-lg text-sm px-5 py-2.5 text-center transition-colors flex-shrink-0">
+                        View Original Job
+                    </a>
+                </header>
+
+                <div id="details-container" class="glass-card p-8 rounded-2xl">
+                    <p id="loading-message" class="text-center text-slate-400">Loading application details...</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="bg-slate-950/50 text-white border-t border-slate-800 mt-auto">
+             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-slate-500">
+                <p>&copy; 2025 CareerBridge. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const navLinksContainer = document.getElementById('nav-links');
+        
+        async function updateAuthState() {
+            // ... (rest of your updateAuthState function is unchanged) ...
+            try {
+                const authResponse = await fetch('../../backend/check_auth.php');
+                if (!authResponse.ok) throw new Error('Auth check failed');
+                const authData = await authResponse.json();
+
+                if (authData.loggedin) {
+                    let navHtml = '<a href="jobs.html" class="text-slate-400 hover:text-white font-medium">Jobs</a><a href="../resources.html" class="text-slate-400 hover:text-white font-medium">Resources</a><a href="../about.html" class="text-slate-400 hover:text-white font-medium">About</a>';
+                    const profileLink = authData.roles && authData.roles.includes('employer') ? 'employer_profile.html' : 'profile.html';
+                    navHtml += `
+                        <div class="relative" id="profile-menu-container">
+                            <button id="profile-menu-button" class="flex items-center focus:outline-none"><img src="https://img.icons8.com/?size=100&id=7819&format=png&color=ffffff" alt="User Avatar" class="w-10 h-10 rounded-full"></button>
+                            <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-slate-800 rounded-lg shadow-xl z-50">
+                                <a href="${profileLink}" class="block px-4 py-2 text-sm text-slate-300 hover:bg-slate-700">My Profile</a>
+                                <a href="../backend/logout_handler.php" class="block px-4 py-2 text-sm text-slate-300 hover:bg-slate-700">Logout</a>
+                            </div>
+                        </div>`;
+                    navLinksContainer.innerHTML = navHtml;
+                    addDropdownListeners();
+                    fetchApplicationDetails(); // Fetch details after confirming login
+                } else {
+                    window.location.href = 'signUp.html'; // Redirect if not logged in
+                }
+            } catch (error) {
+                console.error("Authentication error:", error);
+                window.location.href = 'signUp.html';
+            }
+        }
+
+        function addDropdownListeners() {
+            // ... (rest of your addDropdownListeners function is unchanged) ...
+            const menuButton = document.getElementById('profile-menu-button');
+            const dropdown = document.getElementById('profile-dropdown');
+            if (menuButton && dropdown) {
+                 menuButton.addEventListener('click', (e) => { e.stopPropagation(); dropdown.classList.toggle('hidden'); });
+                 document.addEventListener('click', () => dropdown.classList.add('hidden'));
+            }
+        }
+
+        async function fetchApplicationDetails() {
+            const detailsContainer = document.getElementById('details-container');
+            const jobTitleHeader = document.getElementById('job-title-header');
+            // JAVASCRIPT MODIFIED
+            const viewJobBtn = document.getElementById('view-job-btn');
+            
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const applicationId = urlParams.get('id');
+
+                if (!applicationId) {
+                    throw new Error('Application ID is missing from the URL.');
+                }
+
+                const response = await fetch(`../../backend/get_application_details.php?id=${applicationId}`);
+                if (!response.ok) throw new Error('Network response was not ok.');
+                
+                const data = await response.json();
+                if (!data.success || !data.application) {
+                    throw new Error(data.message || 'Could not load application details.');
+                }
+                
+                const app = data.application;
+                const statusClass = { viewed: 'status-viewed', rejected: 'status-rejected' }[app.status.toLowerCase()] || 'status-applied';
+
+                jobTitleHeader.textContent = app.title;
+                
+                // NEW JAVASCRIPT to set the button's link
+                // Assumes you have a job-detail.html in the same folder
+                viewJobBtn.href = `job-detail.html?id=${app.job_id}`;
+
+                detailsContainer.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <p class="detail-label">Company</p>
+                            <p class="detail-value">${app.company}</p>
+                        </div>
+                        <div>
+                            <p class="detail-label">Location</p>
+                            <p class="detail-value">${app.location}</p>
+                        </div>
+                        <div>
+                            <p class="detail-label">Application Status</p>
+                            <p class="detail-value"><span class="status-badge ${statusClass}">${app.status}</span></p>
+                        </div>
+                        <div>
+                            <p class="detail-label">Date Applied</p>
+                            <p class="detail-value">${app.application_date_formatted}</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <p class="detail-label">Cover Letter</p>
+                            <p class="detail-value whitespace-pre-wrap">${app.cover_letter || 'No cover letter submitted.'}</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <p class="detail-label">Resume/CV</p>
+                            <a href="../${app.resume_path}" target="_blank" class="detail-value text-indigo-400 hover:underline">
+                                View Resume
+                                <i class="fas fa-external-link-alt ml-1 text-sm"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+
+            } catch(error) {
+                detailsContainer.innerHTML = `<p class="text-red-400 text-center py-4">${error.message}</p>`;
+                jobTitleHeader.textContent = 'Error';
+                // Hide button on error
+                viewJobBtn.style.display = 'none';
+            }
+        }
+
+        updateAuthState();
+    });
+    </script>
+</body>
+</html>

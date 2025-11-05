@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // --- DATABASE CONFIGURATION ---
 $servername = "127.0.0.1";
 $username = "root";
@@ -7,6 +8,9 @@ $dbname = "careerbridge";
 
 // --- SCRIPT LOGIC ---
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+=======
+require_once 'database.php';
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
 
 function show_message($title, $message, $is_success = true) {
     $icon = $is_success ? 'fa-check-circle text-green-500' : 'fa-exclamation-triangle text-red-500';
@@ -31,7 +35,11 @@ function show_message($title, $message, $is_success = true) {
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
+<<<<<<< HEAD
     <nav class="bg-white shadow-sm"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div class="flex items-center justify-between h-16"><a href="/JOBSEEKER/frontend/index.html" class="text-2xl font-black gradient-text">JobFinder</a></div></div></nav>
+=======
+    <nav class="bg-white shadow-sm"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div class="flex items-center justify-between h-16"><a href="../index.html" class="text-2xl font-black gradient-text">CareerBridge</a></div></div></nav>
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
     <main class="flex-grow flex items-center justify-center"><div class="max-w-lg w-full bg-white p-8 rounded-2xl shadow-lg text-center"><i class="fas $icon text-6xl mb-6"></i><h1 class="text-3xl font-black text-slate-900">$title</h1><p class="text-slate-600 mt-4 text-lg">$message</p><div class="mt-8"><a href="$button_link" class="btn-primary text-white font-bold px-8 py-3 rounded-xl">$button_text</a></div></div></main>
 </body>
 </html>
@@ -55,7 +63,10 @@ try {
             throw new Exception("Invalid email format.");
         }
 
+<<<<<<< HEAD
         // Check if user already exists
+=======
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
         $stmt_check = $conn->prepare("SELECT id FROM users WHERE email = ?");
         $stmt_check->bind_param("s", $email);
         $stmt_check->execute();
@@ -65,14 +76,20 @@ try {
         }
         $stmt_check->close();
 
+<<<<<<< HEAD
         // Start transaction
         $conn->begin_transaction();
 
         // Insert into users table
+=======
+        $conn->begin_transaction();
+
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         $stmt_user = $conn->prepare("INSERT INTO users (full_name, email, password) VALUES (?, ?, ?)");
         $stmt_user->bind_param("sss", $full_name, $email, $hashed_password);
         $stmt_user->execute();
+<<<<<<< HEAD
         $user_id = $conn->insert_id; // Get the ID of the new user
         $stmt_user->close();
 
@@ -80,12 +97,22 @@ try {
         $role_id = ($user_type === 'employer') ? 2 : 1; // 1 for jobseeker, 2 for employer
 
         // Insert into user_roles table
+=======
+        $user_id = $conn->insert_id; 
+        $stmt_user->close();
+
+        $role_id = ($user_type === 'employer') ? 2 : 1; 
+
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
         $stmt_role = $conn->prepare("INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)");
         $stmt_role->bind_param("ii", $user_id, $role_id);
         $stmt_role->execute();
         $stmt_role->close();
 
+<<<<<<< HEAD
         // Commit the transaction
+=======
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
         $conn->commit();
 
         show_message(
@@ -97,7 +124,11 @@ try {
 
 } catch (Exception $e) {
     if (isset($conn) && $conn->ping()) {
+<<<<<<< HEAD
         $conn->rollback(); // Rollback transaction on error
+=======
+        $conn->rollback();
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
     }
     show_message(
         "Registration Failed",

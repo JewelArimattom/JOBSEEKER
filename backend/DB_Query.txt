@@ -1,3 +1,49 @@
+<<<<<<< HEAD
+=======
+CREATE TABLE jobs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    job_title VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    job_type VARCHAR(50),
+    experience_level VARCHAR(50),
+    salary_min INT,
+    salary_max INT,
+    salary_unit VARCHAR(50),
+    description TEXT NOT NULL,
+    skills VARCHAR(255),
+    company_name VARCHAR(255) NOT NULL,
+    company_website VARCHAR(255),
+    company_logo_path VARCHAR(255),
+    posted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+ALTER TABLE `jobs`
+ADD COLUMN `job_category` VARCHAR(255) NULL AFTER `job_title`,
+ADD COLUMN `openings` INT(11) NULL DEFAULT 1 AFTER `experience_level`,
+ADD COLUMN `application_deadline` DATE NULL AFTER `openings`,
+ADD COLUMN `recruiter_name` VARCHAR(255) NULL AFTER `company_logo_path`,
+ADD COLUMN `recruiter_email` VARCHAR(255) NULL AFTER `recruiter_name`;
+
+
+CREATE TABLE `applications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `job_id` int(11) NOT NULL,
+  `full_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `portfolio_url` varchar(255) DEFAULT NULL,
+  `current_salary` varchar(100) DEFAULT NULL,
+  `expected_salary` varchar(100) DEFAULT NULL,
+  `notice_period` varchar(100) DEFAULT NULL,
+  `resume_path` varchar(255) NOT NULL,
+  `applied_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `job_id` (`job_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- Step 1: Create the `users` table (without the user_type column)
+-- This table will store the core information for every user.
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -9,6 +55,13 @@ CREATE TABLE `users` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
+=======
+
+-- Step 2: Create the `roles` table
+-- This table defines all the possible roles a user can have in your system.
+
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
 CREATE TABLE `roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
@@ -16,6 +69,13 @@ CREATE TABLE `roles` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
+=======
+
+-- Step 3: Create the `user_roles` pivot table
+-- This table connects users to their roles, allowing a single user to have multiple roles.
+
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
 CREATE TABLE `user_roles` (
   `user_id` int(11) NOT NULL,
   `role_id` int(11) NOT NULL,
@@ -25,6 +85,7 @@ CREATE TABLE `user_roles` (
   CONSTRAINT `fk_user_roles_role` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
 INSERT INTO `roles` (`id`, `name`) VALUES
 (1, 'jobseeker'),
 (2, 'employer');
@@ -76,6 +137,32 @@ CREATE TABLE `applications` (
   CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+=======
+
+-- Step 4: Insert the initial roles into the `roles` table
+-- This populates the roles table with the two roles we need right now.
+
+INSERT INTO `roles` (`id`, `name`) VALUES
+(1, 'jobseeker'),
+(2, 'employer');
+___________________________________________________________________________________________________________________
+
+-- Add a column to store which user applied
+ALTER TABLE `applications`
+ADD COLUMN `user_id` INT NULL AFTER `job_id`,
+ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- Add columns for status and date
+ALTER TABLE `applications`
+ADD COLUMN `status` VARCHAR(50) NOT NULL DEFAULT 'Applied' AFTER `resume_path`,
+ADD COLUMN `application_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `status`;
+
+ALTER TABLE `jobs`
+ADD COLUMN `employer_id` INT NULL AFTER `id`,
+ADD CONSTRAINT `fk_jobs_employer_id` FOREIGN KEY (`employer_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-----------------------------------------------------------------------------------------------
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
 CREATE TABLE `messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sender_id` int(11) NOT NULL,

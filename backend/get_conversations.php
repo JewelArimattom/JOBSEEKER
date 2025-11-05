@@ -1,9 +1,14 @@
 <?php
 session_start();
+<<<<<<< HEAD
 $servername = "127.0.0.1";
 $username = "root";
 $password = "";
 $dbname = "careerbridge"; header('Content-Type: application/json');
+=======
+require_once 'database.php';
+header('Content-Type: application/json');
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
 
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
@@ -14,8 +19,12 @@ if (!isset($_SESSION['user_id'])) {
 $current_user_id = $_SESSION['user_id'];
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+<<<<<<< HEAD
 // This query finds all unique users the current user has talked to,
 // gets the last message, and orders by the most recent conversation.
+=======
+
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
 $sql = "
     SELECT
         u.id as contact_id,
@@ -46,7 +55,10 @@ $conversations = [];
 while ($row = $result->fetch_assoc()) {
     if (empty($row['last_message_timestamp'])) continue;
 
+<<<<<<< HEAD
     // Format the timestamp for a user-friendly display
+=======
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
     $date = new DateTime($row['last_message_timestamp']);
     $now = new DateTime();
     $interval = $now->diff($date);
@@ -59,7 +71,10 @@ while ($row = $result->fetch_assoc()) {
         $row['timestamp_formatted'] = $date->format('M d');
     }
     
+<<<<<<< HEAD
     // Create a placeholder avatar based on the user's initial
+=======
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
     $row['avatar'] = 'https://placehold.co/100x100/764ba2/ffffff?text=' . strtoupper(substr($row['contact_name'], 0, 1));
 
     $conversations[] = $row;

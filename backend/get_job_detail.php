@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // --- DATABASE CONFIGURATION ---
 $servername = "127.0.0.1";
 $username = "root";
@@ -16,6 +17,18 @@ $job_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($job_id <= 0) {
     http_response_code(400); // Bad Request
+=======
+require_once 'database.php';
+
+header('Content-Type: application/json');
+
+date_default_timezone_set('Asia/Kolkata');
+
+$job_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+
+if ($job_id <= 0) {
+    http_response_code(400); 
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
     echo json_encode(['error' => 'Invalid job ID provided.']);
     exit;
 }
@@ -25,7 +38,10 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 try {
     $conn = new mysqli($servername, $username, $password, $dbname);
 
+<<<<<<< HEAD
     // Prepare a statement to prevent SQL injection, now selecting all new columns
+=======
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
     $stmt = $conn->prepare("SELECT * FROM jobs WHERE id = ?");
     $stmt->bind_param("i", $job_id);
     $stmt->execute();
@@ -34,14 +50,21 @@ try {
     if ($result->num_rows > 0) {
         $job = $result->fetch_assoc();
         
+<<<<<<< HEAD
         // Format the data for consistency with the frontend
+=======
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
         $job['tags'] = !empty($job['skills']) ? array_map('trim', explode(',', $job['skills'])) : [];
         $job['salary'] = '₹' . $job['salary_min'] . ' - ₹' . $job['salary_max'] . ' ' . $job['salary_unit'];
         $job['posted'] = time_ago($job['posted_at']);
         
         echo json_encode($job);
     } else {
+<<<<<<< HEAD
         http_response_code(404); // Not Found
+=======
+        http_response_code(404); 
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
         echo json_encode(['error' => 'Job not found.']);
     }
 
@@ -49,11 +72,18 @@ try {
     $conn->close();
 
 } catch (Exception $e) {
+<<<<<<< HEAD
     http_response_code(500); // Internal Server Error
     echo json_encode(['error' => "Server Error: " . $e->getMessage()]);
 }
 
 // Helper function to create a "time ago" string
+=======
+    http_response_code(500); 
+    echo json_encode(['error' => "Server Error: " . $e->getMessage()]);
+}
+
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
 function time_ago($timestamp) {
     $time_ago = strtotime($timestamp);
     $current_time = time();

@@ -1,5 +1,6 @@
 <?php
 session_start();
+<<<<<<< HEAD
 $servername = "127.0.0.1";
 $username = "root";
 $password = "";
@@ -9,6 +10,12 @@ $dbname = "careerbridge";
 $data = json_decode(file_get_contents('php://input'), true);
 
 // Basic validation to ensure all required data is present
+=======
+require_once 'database.php';
+
+$data = json_decode(file_get_contents('php://input'), true);
+
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
 if (!isset($_SESSION['user_id']) || !isset($data['recipient_id']) || !isset($data['message_text'])) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Missing required parameters.']);
@@ -19,7 +26,10 @@ $sender_id = $_SESSION['user_id'];
 $recipient_id = filter_var($data['recipient_id'], FILTER_SANITIZE_NUMBER_INT);
 $message_text = htmlspecialchars(trim($data['message_text']));
 
+<<<<<<< HEAD
 // Prevent empty messages from being sent
+=======
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
 if (empty($message_text)) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Message cannot be empty.']);
@@ -28,7 +38,10 @@ if (empty($message_text)) {
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+<<<<<<< HEAD
 // Prepare and execute the SQL query to insert the new message
+=======
+>>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
 $sql = "INSERT INTO messages (sender_id, recipient_id, message_text) VALUES (?, ?, ?)";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("iis", $sender_id, $recipient_id, $message_text);
