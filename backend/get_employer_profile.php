@@ -1,18 +1,8 @@
 <?php
 session_start();
 header('Content-Type: application/json');
-<<<<<<< HEAD
-
-// --- DATABASE CONFIGURATION ---
-$servername = "127.0.0.1";
-$username = "root";
-$password = "";
-$dbname = "careerbridge";
-
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-=======
 require_once 'database.php';
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
 
 $response = [
     'success' => false,
@@ -21,10 +11,7 @@ $response = [
 ];
 
 try {
-<<<<<<< HEAD
-    // --- AUTHENTICATION & ROLE CHECK ---
-=======
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
     if (!isset($_SESSION['user_id']) || !in_array('employer', $_SESSION['roles'] ?? [])) {
         throw new Exception("Access Denied. Employer account required.");
     }
@@ -32,10 +19,7 @@ try {
 
     $conn = new mysqli($servername, $username, $password, $dbname);
 
-<<<<<<< HEAD
-    // --- GET EMPLOYER DETAILS ---
-=======
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
     $stmt_user = $conn->prepare("SELECT full_name, email FROM users WHERE id = ?");
     $stmt_user->bind_param("i", $employer_id);
     $stmt_user->execute();
@@ -45,10 +29,7 @@ try {
     }
     $stmt_user->close();
 
-<<<<<<< HEAD
-    // --- GET POSTED JOBS WITH APPLICATION COUNT ---
-=======
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
     $stmt_jobs = $conn->prepare("
         SELECT 
             j.id,
@@ -73,11 +54,8 @@ try {
     $conn->close();
 
 } catch (Exception $e) {
-<<<<<<< HEAD
-    http_response_code(403); // Forbidden
-=======
-    http_response_code(403); 
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+http_response_code(403); 
+
     $response['message'] = $e->getMessage();
 }
 

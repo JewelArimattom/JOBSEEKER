@@ -1,13 +1,7 @@
 <?php
 session_start();
-<<<<<<< HEAD
-$servername = "127.0.0.1";
-$username = "root";
-$password = "";
-$dbname = "careerbridge";
-=======
 require_once 'database.php';
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
 header('Content-Type: application/json');
 
 if (!isset($_SESSION['user_id'])) {

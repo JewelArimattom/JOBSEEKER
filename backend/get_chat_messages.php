@@ -1,13 +1,7 @@
 <?php
 session_start();
-<<<<<<< HEAD
-$servername = "127.0.0.1";
-$username = "root";
-$password = "";
-$dbname = "careerbridge";
-=======
 require_once 'database.php';
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
 
 if (!isset($_SESSION['user_id']) || !isset($_GET['contact_id'])) {
     http_response_code(400);
@@ -19,10 +13,7 @@ $current_user_id = $_SESSION['user_id'];
 $contact_id = filter_var($_GET['contact_id'], FILTER_SANITIZE_NUMBER_INT);
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-<<<<<<< HEAD
-// Fetch all messages between the current user and the selected contact
-=======
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
 $sql = "
     SELECT sender_id, message_text, created_at
     FROM messages
@@ -39,29 +30,20 @@ $messages = [];
 while ($row = $result->fetch_assoc()) {
     $date = new DateTime($row['created_at']);
     $row['time'] = $date->format('h:i A');
-<<<<<<< HEAD
-    // Determine if the message was sent by the current user or the other person
-=======
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
     $row['sender'] = ($row['sender_id'] == $current_user_id) ? 'me' : 'other';
     $row['text'] = htmlspecialchars($row['message_text']);
     $messages[] = $row;
 }
 
-<<<<<<< HEAD
-// Mark messages as read since they are being fetched
-=======
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
 $update_sql = "UPDATE messages SET is_read = 1 WHERE sender_id = ? AND recipient_id = ?";
 $update_stmt = $conn->prepare($update_sql);
 $update_stmt->bind_param("ii", $contact_id, $current_user_id);
 $update_stmt->execute();
 $update_stmt->close();
 
-<<<<<<< HEAD
-// Get contact info for the chat header
-=======
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
 $contact_stmt = $conn->prepare("SELECT full_name FROM users WHERE id = ?");
 $contact_stmt->bind_param("i", $contact_id);
 $contact_stmt->execute();

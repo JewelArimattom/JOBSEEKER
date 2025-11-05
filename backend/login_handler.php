@@ -1,24 +1,9 @@
 <?php
-<<<<<<< HEAD
-session_start(); // Start the session at the very beginning
-
-// --- DATABASE CONFIGURATION ---
-$servername = "127.0.0.1";
-$username = "root";
-$password = "";
-$dbname = "careerbridge";
-
-// --- SCRIPT LOGIC ---
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-function show_error_message($message) {
-    // Using heredoc for cleaner HTML without escaping quotes
-=======
 session_start(); 
 require_once 'database.php';
 
 function show_error_message($message) {
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -50,11 +35,8 @@ function show_error_message($message) {
             {$message}
         </p>
 
-<<<<<<< HEAD
-        <a href="/frontend/components/signUp.html" class="inline-block bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors duration-300">
-=======
-        <a href="../frontend/components/signUp.html" class="inline-block bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors duration-300">
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+<a href="../frontend/components/signUp.html" class="inline-block bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors duration-300">
+
             <i class="fas fa-redo-alt mr-2"></i> Try Again
         </a>
 
@@ -65,10 +47,7 @@ HTML;
 }
 
 try {
-<<<<<<< HEAD
-    $conn = new mysqli($servername, $username, $password, $dbname);
-=======
-    error_log("Current script path: " . __FILE__);
+error_log("Current script path: " . __FILE__);
     error_log("Database include path: " . realpath('database.php'));
     
     if (!isset($servername) || !isset($username) || !isset($password) || !isset($dbname)) {
@@ -88,7 +67,7 @@ try {
         throw new Exception("Database connection failed: " . $conn->connect_error);
     }
     error_log("Database connection successful");
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty($_POST['email']) || empty($_POST['password'])) {
@@ -98,10 +77,7 @@ try {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-<<<<<<< HEAD
-        // Prepare statement to find user by email
-=======
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
         $stmt = $conn->prepare("SELECT id, full_name, email, password FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -110,13 +86,8 @@ try {
         if ($result->num_rows === 1) {
             $user = $result->fetch_assoc();
 
-<<<<<<< HEAD
-            // Verify the password
-            if (password_verify($password, $user['password'])) {
-                // Password is correct, now get roles
-=======
-            if (password_verify($password, $user['password'])) {
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+if (password_verify($password, $user['password'])) {
+
                 $stmt_roles = $conn->prepare(
                     "SELECT r.name FROM roles r JOIN user_roles ur ON r.id = ur.role_id WHERE ur.user_id = ?"
                 );
@@ -129,24 +100,15 @@ try {
                     $roles[] = $row['name'];
                 }
                 
-<<<<<<< HEAD
-                // Store user data in session
-=======
-                session_unset();
+session_unset();
                 
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['full_name'] = $user['full_name'];
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['roles'] = $roles;
                 $_SESSION['loggedin'] = true;
-<<<<<<< HEAD
-
-                // Redirect to the home page after successful login
-                header("Location: /frontend/index.html");
-=======
-                
-                session_write_close();
+session_write_close();
                 session_start();
 
                 $redirect_path = realpath(__DIR__ . '/../index.html');
@@ -158,7 +120,7 @@ try {
                 
                 // Redirect to the home page after successful login
                 header("Location: ../index.html");
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
                 exit();
 
             } else {
@@ -174,10 +136,7 @@ try {
     $conn->close();
 
 } catch (Exception $e) {
-<<<<<<< HEAD
-    show_error_message("An error occurred: " . $e->getMessage());
-=======
-    error_log("Login Error: " . $e->getMessage());
+error_log("Login Error: " . $e->getMessage());
     error_log("Stack trace: " . $e->getTraceAsString());
     
     // Show detailed error in both development and production
@@ -189,6 +148,6 @@ try {
     $error_message .= "Stack Trace: " . $e->getTraceAsString();
     
     show_error_message($error_message);
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
 }
 ?>

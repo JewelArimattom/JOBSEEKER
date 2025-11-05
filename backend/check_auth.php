@@ -1,23 +1,4 @@
 <?php
-<<<<<<< HEAD
-// Start the session to access session variables
-session_start();
-
-// Set the header to indicate the response is JSON
-header('Content-Type: application/json');
-
-// Check if the user is logged in
-if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
-    // If logged in, return their status, name, and roles
-    echo json_encode([
-        'loggedin' => true,
-        'full_name' => $_SESSION['full_name'],
-        'roles' => $_SESSION['roles']
-    ]);
-} else {
-    // If not logged in, return that status
-    echo json_encode(['loggedin' => false]);
-=======
 // Configure session settings before starting the session
 ini_set('session.cookie_httponly', 1);
 ini_set('session.use_only_cookies', 1);
@@ -82,6 +63,6 @@ try {
         'error' => $e->getMessage(),
         'debug' => $debug // Remove this in production
     ]);
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
 }
 ?>

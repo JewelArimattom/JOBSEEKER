@@ -1,19 +1,4 @@
 <?php
-<<<<<<< HEAD
-session_start();
-header('Content-Type: application/json');
-
-// --- DATABASE CONFIGURATION ---
-$servername = "127.0.0.1";
-$username = "root";
-$password = "";
-$dbname = "careerbridge";
-
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-// Response structure
-=======
-
 ini_set('session.cookie_httponly', 1);
 ini_set('session.use_only_cookies', 1);
 ini_set('session.cookie_secure', isset($_SERVER['HTTPS']));
@@ -31,7 +16,7 @@ session_start();
 header('Content-Type: application/json');
 require_once 'database.php'; 
 
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
 $response = [
     'success' => false,
     'user' => null,
@@ -45,15 +30,11 @@ try {
     $user_id = (int)$_SESSION['user_id'];
 
     $conn = new mysqli($servername, $username, $password, $dbname);
-<<<<<<< HEAD
-
-    // --- GET USER DETAILS ---
-=======
-    if ($conn->connect_error) {
+if ($conn->connect_error) {
         throw new Exception("Database connection failed: " . $conn->connect_error);
     }
 
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
     $stmt_user = $conn->prepare("SELECT full_name, email FROM users WHERE id = ?");
     $stmt_user->bind_param("i", $user_id);
     $stmt_user->execute();
@@ -63,24 +44,14 @@ try {
     }
     $stmt_user->close();
 
-<<<<<<< HEAD
-    // --- GET APPLIED JOBS (QUERY CORRECTED AGAIN) ---
-    $stmt_apps = $conn->prepare("
-        SELECT 
-            j.job_title AS title,
-            j.company_name AS company,        -- Corrected Line
-            j.location,
-            j.company_logo_path AS logo,      -- Corrected Line
-=======
-   
-    $stmt_apps = $conn->prepare("
+$stmt_apps = $conn->prepare("
         SELECT 
             a.id AS application_id, -- <<< THE CRITICAL FIX IS HERE
             j.job_title AS title,
             j.company_name AS company,
             j.location,
             j.company_logo_path AS logo,
->>>>>>> 27563df3330c0a314502bac4c079e3f72fc17b54
+
             a.status,
             DATE_FORMAT(a.application_date, '%d %b %Y') as application_date_formatted
         FROM applications a
