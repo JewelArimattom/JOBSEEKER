@@ -59,7 +59,7 @@
         <nav class="sticky top-0 left-0 right-0 z-50 nav-blur">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
-                    <a href="index.html" class="text-2xl font-black gradient-text">CareerBridge</a>
+                    <a href="../index.html" class="text-2xl font-black gradient-text">CareerBridge</a>
                     <div class="hidden md:block">
                         <div id="nav-links" class="flex items-center space-x-8">
                              </div>
@@ -100,10 +100,9 @@
                     <div>
                         <h4 class="font-bold text-slate-100 mb-4 tracking-wider">Quick Links</h4>
                         <ul class="space-y-3">
-                            <li><a href="../about.html" class="text-slate-400 hover:text-white transition-colors">About Us</a></li>
+                            <li><a href="about.html" class="text-slate-400 hover:text-white transition-colors">About Us</a></li>
                             <li><a href="jobs.html" class="text-slate-400 hover:text-white transition-colors">Jobs</a></li>
-                            <li><a href="#" class="text-slate-400 hover:text-white transition-colors">Companies</a></li>
-                            <li><a href="../resources.html" class="text-slate-400 hover:text-white transition-colors">Resources</a></li>
+                            <li><a href="resources.html" class="text-slate-400 hover:text-white transition-colors">Resources</a></li>
                         </ul>
                     </div>
                     <div>
@@ -248,7 +247,7 @@
                 const authResponse = await fetch('../backend/check_auth.php');
                 const authData = await authResponse.json();
                 
-                let navHtml = '<a href="../jobs.html" class="text-slate-400 hover:text-white font-medium">Jobs</a><a href="../resources.html" class="text-slate-400 hover:text-white font-medium">Resources</a><a href="../about.html" class="text-slate-400 hover:text-white font-medium">About</a>';
+                let navHtml = '<a href="jobs.html" class="text-slate-400 hover:text-white font-medium">Jobs</a><a href="resources.html" class="text-slate-400 hover:text-white font-medium">Resources</a><a href="about.html" class="text-slate-400 hover:text-white font-medium">About</a>';
 
                 if (authData.loggedin) {
                     const isEmployer = authData.roles && authData.roles.includes('employer');
@@ -258,9 +257,9 @@
                     const messagesData = await messagesResponse.json();
                     
                     if (messagesData.success && messagesData.has_new_messages) {
-                        navHtml += `<a href="/JOBSEEKER/frontend/components/message.html" class="relative text-slate-400 hover:text-white font-medium">Messages<span class="notification-dot"></span></a>`;
+                        navHtml += `<a href="components/message.html" class="relative text-slate-400 hover:text-white font-medium">Messages<span class="notification-dot"></span></a>`;
                     } else if (!isEmployer) {
-                         navHtml += '<a href="/JOBSEEKER/frontend/components/message.html" class="text-slate-400 hover:text-white font-medium">Messages</a>';
+                         navHtml += '<a href="components/message.html" class="text-slate-400 hover:text-white font-medium">Messages</a>';
                     }
 
                     navHtml += `
@@ -275,8 +274,8 @@
                     navLinksContainer.innerHTML = navHtml;
                     addDropdownListeners();
                     fetchProfileData(); 
-                } else { window.location.href = 'signUp.html'; }
-            } catch (error) { window.location.href = 'signUp.html'; }
+                } else { window.location.href = 'components/signUp.html'; }
+            } catch (error) { window.location.href = 'components/signUp.html'; }
         }
 
         function addDropdownListeners() {
@@ -322,7 +321,7 @@
                             </div>
                             <div class="flex items-center gap-4 mt-3 sm:mt-0 flex-shrink-0">
                                 <span class="status-badge ${statusClass}">${job.status}</span>
-                                <a href="/careerbridge/frontend/components/application_details.html?id=${job.application_id}" 
+                                <a href="components/application_details.html?id=${job.application_id}" 
                                    class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
                                    title="View your submitted application">
                                    View Application

@@ -60,14 +60,7 @@
             position: relative;
             overflow: hidden;
         }
-        #grid-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
+        
         #header-content {
             position: relative;
             z-index: 2;
@@ -90,7 +83,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0">
-                    <a href="/careerbridge/index.html" class="text-2xl font-black gradient-text">CareerBridge</a>
+                    <a href="../../index.html" class="text-2xl font-black gradient-text">CareerBridge</a>
                 </div>
                 <div class="hidden md:block">
                     <div class="flex items-center space-x-8">
@@ -106,7 +99,6 @@
     </nav>
     
     <header id="job-header" class="py-16">
-        <canvas id="grid-canvas"></canvas>
         <div id="header-content">
             </div>
     </header>
@@ -130,7 +122,38 @@
 
     <footer class="bg-slate-950 text-white mt-16 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div class="text-center text-slate-500">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-10">
+                <div class="lg:col-span-1">
+                    <a href="../../index.html" class="text-2xl font-black gradient-text mb-4 inline-block">CareerBridge</a>
+                    <p class="text-slate-400 text-sm">Your career growth partner, connecting talent with opportunity across India.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-100 mb-4 tracking-wider">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="../about.html" class="text-slate-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="../jobs.html" class="text-slate-400 hover:text-white transition-colors">Jobs</a></li>
+                        <li><a href="../resources.html" class="text-slate-400 hover:text-white transition-colors">Resources</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-100 mb-4 tracking-wider">Legal</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-slate-400 hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="text-slate-400 hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="text-slate-400 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-100 mb-4 tracking-wider">Connect With Us</h4>
+                    <div class="flex space-x-5">
+                        <a href="#" aria-label="Twitter" class="text-slate-400 hover:text-white text-xl transition-colors"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn" class="text-slate-400 hover:text-white text-xl transition-colors"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="GitHub" class="text-slate-400 hover:text-white text-xl transition-colors"><i class="fab fa-github"></i></a>
+                        <a href="#" aria-label="Instagram" class="text-slate-400 hover:text-white text-xl transition-colors"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 text-center text-slate-500">
                 <p>&copy; 2025 CareerBridge. All rights reserved.</p>
             </div>
         </div>
@@ -138,107 +161,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Interactive Grid Distortion Effect ---
-    const gridCanvas = document.getElementById('grid-canvas');
-    if (gridCanvas) {
-        const ctx = gridCanvas.getContext('2d');
-        const config = {
-            rows: 0, cols: 0, spacing: 40, points: [],
-            mouse: { x: undefined, y: undefined, radius: 150 },
-            lineColor: 'rgba(139, 92, 246, 0.25)',
-            dotColor: 'rgba(167, 139, 250, 0.6)'
-        };
-        let animationFrameId = null;
-        let isMouseOver = false;
-
-        class Point {
-            constructor(x, y) { this.x = x; this.y = y; this.originX = x; this.originY = y; this.vx = 0; this.vy = 0; }
-            update() {
-                const dx = config.mouse.x - this.x; const dy = config.mouse.y - this.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                if (isMouseOver && dist < config.mouse.radius) {
-                    const angle = Math.atan2(dy, dx);
-                    const force = (config.mouse.radius - dist) / config.mouse.radius;
-                    this.vx -= Math.cos(angle) * force * 0.5; this.vy -= Math.sin(angle) * force * 0.5;
-                }
-                this.vx += (this.originX - this.x) * 0.01; this.vy += (this.originY - this.y) * 0.01;
-                this.vx *= 0.95; this.vy *= 0.95; this.x += this.vx; this.y += this.vy;
-            }
-            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI * 2); ctx.fillStyle = config.dotColor; ctx.fill(); }
-        }
-
-        function init() {
-            const header = document.getElementById('job-header');
-            gridCanvas.width = header.clientWidth; gridCanvas.height = header.clientHeight;
-            config.points = [];
-            config.cols = Math.floor(gridCanvas.width / config.spacing) + 1;
-            config.rows = Math.floor(gridCanvas.height / config.spacing) + 1;
-            for (let y = 0; y < config.rows; y++) {
-                for (let x = 0; x < config.cols; x++) {
-                    config.points.push(new Point(x * config.spacing, y * config.spacing));
-                }
-            }
-            // Draw initial static grid
-            drawGrid();
-        }
-
-        function drawGrid() {
-            ctx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
-            for (let i = 0; i < config.points.length; i++) { config.points[i].draw(); }
-            drawLines();
-        }
-
-        function animate() {
-            let isSettled = true;
-            ctx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
-            for (let i = 0; i < config.points.length; i++) {
-                config.points[i].update();
-                config.points[i].draw();
-                if (Math.abs(config.points[i].vx) > 0.01 || Math.abs(config.points[i].vy) > 0.01) {
-                    isSettled = false;
-                }
-            }
-            drawLines();
-            
-            if (!isMouseOver && isSettled) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = null;
-            } else {
-                animationFrameId = requestAnimationFrame(animate);
-            }
-        }
-
-        function drawLines() {
-            ctx.beginPath(); ctx.strokeStyle = config.lineColor; ctx.lineWidth = 1;
-            for (let y = 0; y < config.rows; y++) {
-                for (let x = 0; x < config.cols - 1; x++) {
-                    const p1 = config.points[y * config.cols + x]; const p2 = config.points[y * config.cols + x + 1];
-                    ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
-                }
-            }
-            for (let x = 0; x < config.cols; x++) {
-                for (let y = 0; y < config.rows - 1; y++) {
-                    const p1 = config.points[y * config.cols + x]; const p2 = config.points[(y + 1) * config.cols + x];
-                    ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
-                }
-            }
-            ctx.stroke();
-        }
-
-        const header = document.getElementById('job-header');
-        header.addEventListener('mousemove', e => { const rect = header.getBoundingClientRect(); config.mouse.x = e.clientX - rect.left; config.mouse.y = e.clientY - rect.top; });
-        header.addEventListener('mouseenter', () => { 
-            isMouseOver = true;
-            if (!animationFrameId) {
-                animate();
-            }
-        });
-        header.addEventListener('mouseleave', () => { isMouseOver = false; });
-        window.addEventListener('resize', init);
-        
-        setTimeout(init, 100);
-    }
-
+    
     // --- Fetch and Render Job Details ---
     const headerContentContainer = document.getElementById('header-content');
     const jobDetailContainer = document.getElementById('job-detail-content');
@@ -258,8 +181,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const [jobResponse, allJobsResponse] = await Promise.all([
-                fetch(`/CareerBridge/backend/get_job_detail.php?id=${jobId}`),
-                fetch(`/CareerBridge/backend/get_jobs.php`)
+                fetch(`../../backend/get_job_detail.php?id=${jobId}`),
+                fetch(`../../backend/get_jobs.php`)
             ]);
             
             if (!jobResponse.ok) throw new Error(`HTTP error! status: ${jobResponse.status}`);
@@ -271,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             document.title = `${job.job_title} - CareerBridge`;
             const companyInitial = job.company_name ? job.company_name.charAt(0).toUpperCase() : 'C';
-            const logoSrc = job.company_logo_path && !job.company_logo_path.endsWith('/') ? `/CareerBridge/backend/${job.company_logo_path}` : `https://placehold.co/100x100/667eea/ffffff?text=${companyInitial}&font=inter`;
+            const logoSrc = job.company_logo_path && !job.company_logo_path.endsWith('/') ? `../../backend/${job.company_logo_path}` : `https://placehold.co/100x100/667eea/ffffff?text=${companyInitial}&font=inter`;
             
             const headerHtml = `
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

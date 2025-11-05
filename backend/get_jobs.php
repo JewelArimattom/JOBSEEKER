@@ -32,7 +32,7 @@ try {
                 'type' => htmlspecialchars($row['job_type']),
                 'experience' => htmlspecialchars($row['experience_level']),
                 'posted' => time_ago($row['posted_at']),
-                'logo' => !empty($row['company_logo_path']) ? '/CareerBridge/backend/' . htmlspecialchars($row['company_logo_path']) : null,
+                'logo' => !empty($row['company_logo_path']) ? htmlspecialchars($row['company_logo_path']) : null,
                 'tags' => !empty($row['skills']) ? array_map('trim', explode(',', $row['skills'])) : []
             ];
             $jobs[] = $formatted_job;

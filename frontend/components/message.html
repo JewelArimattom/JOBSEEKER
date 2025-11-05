@@ -61,7 +61,7 @@
         <nav class="sticky top-0 left-0 right-0 z-50 nav-blur">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
-                    <a href="/careerbridge/index.html" class="text-2xl font-black gradient-text">CareerBridge</a>
+                    <a href="../../index.html" class="text-2xl font-black gradient-text">CareerBridge</a>
                 </div>
             </div>
         </nav>
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Full Backend Functions ---
     async function loadConversations() {
         try {
-            const response = await fetch('/CareerBridge/backend/get_conversations.php');
+            const response = await fetch('../../backend/get_conversations.php');
             const data = await response.json();
             if (data.success) {
                 renderContactList(data.conversations);
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         chatWindowEl.innerHTML = '<div class="flex items-center justify-center h-full"><p class="text-slate-500">Loading chat...</p></div>';
         try {
-            const response = await fetch(`/CareerBridge/backend/get_chat_messages.php?contact_id=${contactId}`);
+            const response = await fetch(`../../backend/get_chat_messages.php?contact_id=${contactId}`);
             const data = await response.json();
             if (data.success) {
                 renderChatWindow(data);
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     async function sendMessage(recipientId, messageText) {
         try {
-            const response = await fetch('/CareerBridge/backend/send_message.php', {
+            const response = await fetch('../../backend/send_message.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ recipient_id: recipientId, message_text: messageText })

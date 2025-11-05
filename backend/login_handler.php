@@ -1,5 +1,5 @@
 <?php
-session_start(); 
+require_once 'session_config.php'; 
 require_once 'database.php';
 
 function show_error_message($message) {
@@ -45,26 +45,14 @@ HTML;
 }
 
 try {
-    error_log("Current script path: " . __FILE__);
-    error_log("Database include path: " . realpath('database.php'));
-    
     if (!isset($servername) || !isset($username) || !isset($password) || !isset($dbname)) {
-        error_log("Database variables not set. Contents of database.php:");
-        error_log(file_get_contents('database.php'));
         throw new Exception("Database configuration not loaded properly. Check database.php");
     }
     
-    error_log("Attempting database connection with:");
-    error_log("Server: " . $servername);
-    error_log("Username: " . $username);
-    error_log("Database: " . $dbname);
-    
     $conn = new mysqli($servername, $username, $password, $dbname);
     if ($conn->connect_error) {
-        error_log("Database connection failed: " . $conn->connect_error);
         throw new Exception("Database connection failed: " . $conn->connect_error);
     }
-    error_log("Database connection successful");
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty($_POST['email']) || empty($_POST['password'])) {
@@ -83,6 +71,7 @@ try {
             $user = $result->fetch_assoc();
 
             if (password_verify($password, $user['password'])) {
+                // Fetch user roles
                 $stmt_roles = $conn->prepare(
                     "SELECT r.name FROM roles r JOIN user_roles ur ON r.id = ur.role_id WHERE ur.user_id = ?"
                 );
@@ -94,24 +83,24 @@ try {
                 while ($row = $roles_result->fetch_assoc()) {
                     $roles[] = $row['name'];
                 }
+                $stmt_roles->close();
                 
-                session_unset();
+                // Clear any existing session data
+                $_SESSION = array();
                 
+                // Set new session variables
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['full_name'] = $user['full_name'];
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['roles'] = $roles;
                 $_SESSION['loggedin'] = true;
+                $_SESSION['login_time'] = time();
                 
+                // Force session save
                 session_write_close();
-                session_start();
-
-                $redirect_path = realpath(__DIR__ . '/../index.html');
-                error_log("Attempting to redirect to: " . $redirect_path);
-                if (!file_exists($redirect_path)) {
-                    error_log("Error: index.html not found at " . $redirect_path);
-                    throw new Exception("Unable to find the home page. Please contact support.");
-                }
+                
+                // Restart session to ensure data is available
+                require_once 'session_config.php';
                 
                 // Redirect to the home page after successful login
                 header("Location: ../index.html");
@@ -130,17 +119,7 @@ try {
     $conn->close();
 
 } catch (Exception $e) {
-    error_log("Login Error: " . $e->getMessage());
-    error_log("Stack trace: " . $e->getTraceAsString());
-    
-    // Show detailed error in both development and production
-    $error_message = "An error occurred: " . $e->getMessage() . "\n\n";
-    $error_message .= "File: " . __FILE__ . "\n";
-    $error_message .= "Database Path: " . realpath('database.php') . "\n";
-    $error_message .= "Index Path: " . realpath(__DIR__ . '/../index.html') . "\n";
-    $error_message .= "Current Directory: " . getcwd() . "\n";
-    $error_message .= "Stack Trace: " . $e->getTraceAsString();
-    
-    show_error_message($error_message);
+    // Show error message
+    show_error_message("An error occurred during login. Please try again or contact support if the problem persists.");
 }
 ?>

@@ -7,8 +7,8 @@ $upload_dir = "../frontend/uploads/";
 function show_message($title, $message, $is_success = true) {
     $icon = $is_success ? 'fa-check-circle text-green-500' : 'fa-exclamation-triangle text-red-500';
     $button_text = $is_success ? 'View Dashboard' : 'Try Again';
-    $button_link = $is_success ? '/CareerBridge/frontend/employer_profile.html' : 'javascript:history.back()';
-    $post_another_link = '/CareerBridge/frontend/components/postJobs.html';
+    $button_link = $is_success ? '../frontend/employer_profile.html' : 'javascript:history.back()';
+    $post_another_link = '../frontend/components/post-job.html';
 
     echo <<<HTML
 <!DOCTYPE html>
@@ -31,7 +31,7 @@ function show_message($title, $message, $is_success = true) {
     <nav class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <a href="/CareerBridge/frontend/index.html" class="text-2xl font-black gradient-text">JobFinder</a>
+                <a href="../index.html" class="text-2xl font-black gradient-text">CareerBridge</a>
             </div>
         </div>
     </nav>

@@ -68,7 +68,6 @@ try {
 
 } catch (Exception $e) {
     http_response_code(500); 
-    error_log($e->getMessage());
     echo json_encode(['success' => false, 'message' => 'An internal server error occurred: ' . $e->getMessage()]);
 } finally {
     if ($conn) {

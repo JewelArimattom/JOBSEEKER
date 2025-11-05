@@ -113,3 +113,21 @@ CREATE TABLE `messages` (
   CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`recipient_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+Admin Add
+
+-- Step 1: Add admin role
+INSERT INTO `roles` (`id`, `name`) VALUES (3, 'admin')
+ON DUPLICATE KEY UPDATE `name` = 'admin';
+
+-- Step 2: Make yourself admin (replace with YOUR email)
+INSERT INTO `user_roles` (`user_id`, `role_id`)
+SELECT u.id, 3
+FROM `users` u
+WHERE u.email = 'your-email@example.com'
+AND NOT EXISTS (
+    SELECT 1 FROM `user_roles` ur 
+    WHERE ur.user_id = u.id AND ur.role_id = 3
+);

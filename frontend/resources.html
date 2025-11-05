@@ -6,7 +6,7 @@
     <title>AI Career Resources - CareerBridge</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -100,8 +100,31 @@
             padding: 2.5rem;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             border: 1px solid #334155;
-            min-height: 100%;
+            min-height: 400px;
         }
+        
+        /* PDF Export Styles - Clean professional look */
+        #resume-preview.pdf-mode {
+            background-color: #ffffff !important;
+            color: #1e293b !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        #resume-preview.pdf-mode .resume-name { color: #1e40af !important; }
+        #resume-preview.pdf-mode .resume-section-title { color: #1e40af !important; border-bottom-color: #cbd5e1 !important; }
+        #resume-preview.pdf-mode .resume-header { border-bottom-color: #cbd5e1 !important; }
+        #resume-preview.pdf-mode .resume-contact { color: #475569 !important; }
+        #resume-preview.pdf-mode .contact-item { color: #475569 !important; }
+        #resume-preview.pdf-mode a { color: #1e40af !important; }
+        #resume-preview.pdf-mode p, #resume-preview.pdf-mode ul, #resume-preview.pdf-mode li { color: #334155 !important; }
+        #resume-preview.pdf-mode .experience-item h3 { color: #1e293b !important; }
+        #resume-preview.pdf-mode .experience-item p { color: #475569 !important; }
+        #resume-preview.pdf-mode .skills-container span { 
+            background-color: #e0e7ff !important; 
+            color: #3730a3 !important; 
+            border: 1px solid #c7d2fe !important;
+        }
+        
         #resume-preview a { color: #a7b2f5; }
         #resume-preview .resume-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #334155; padding-bottom: 1rem; margin-bottom: 1.5rem; }
         #resume-preview .resume-name { font-size: 2.5rem; font-weight: 900; color: #a7b2f5; line-height: 1.1; }
@@ -122,7 +145,7 @@
         <nav class="sticky top-0 left-0 right-0 z-50 nav-blur">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
-                    <div class="flex-shrink-0"><a href="/careerbridge/index.html" class="text-2xl font-black gradient-text">CareerBridge</a></div>
+                    <div class="flex-shrink-0"><a href="../index.html" class="text-2xl font-black gradient-text">CareerBridge</a></div>
                     <div class="hidden md:block">
                         <div class="flex items-center space-x-8">
                             <a href="jobs.html" class="text-slate-400 hover:text-white font-medium">Jobs</a>
@@ -174,30 +197,113 @@
                 </div>
             </section>
 
-            <section id="resume-builder" class="py-20 bg-slate-900/50">
+            <section id="ats-scanner" class="py-20 bg-slate-900/50">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center mb-16">
-                        <span class="text-sm font-bold uppercase text-indigo-400">Build & Impress</span>
-                        <h2 class="text-4xl md:text-5xl font-black text-slate-100 mt-2">Create Your Professional <span class="gradient-text">Resume</span></h2>
-                        <p class="mt-4 text-lg text-slate-400 max-w-3xl mx-auto">Fill in your details and see your resume come to life instantly. Download a professional-grade PDF ready for your job applications.</p>
+                    <div class="text-center mb-12">
+                        <span class="text-sm font-bold uppercase text-indigo-400">Optimize For ATS</span>
+                        <h2 class="text-3xl md:text-4xl font-black text-slate-100 mt-2">ATS Resume Scanner & Suggestions</h2>
+                        <p class="text-slate-400 mt-2">Paste your resume (or upload PDF/TXT) and the job description. Get a score, missing keywords, and specific improvements.</p>
                     </div>
-                    <div class="grid lg:grid-cols-2 gap-12">
+
+                    <div class="grid lg:grid-cols-2 gap-8">
                         <div class="space-y-6">
-                            <div class="form-section-card"><h3 class="text-xl font-bold text-slate-100 mb-4">Personal Information</h3><div class="grid sm:grid-cols-2 gap-4"><div><label class="block text-sm font-medium text-slate-400 mb-1">Full Name</label><input onkeyup="updatePreview()" id="resume-name" type="text" placeholder="Your Name" class="resume-input"></div><div><label class="block text-sm font-medium text-slate-400 mb-1">Email</label><input onkeyup="updatePreview()" id="resume-email" type="email" placeholder="your.email@example.com" class="resume-input"></div><div><label class="block text-sm font-medium text-slate-400 mb-1">Phone Number</label><input onkeyup="updatePreview()" id="resume-phone" type="tel" placeholder="Your Phone" class="resume-input"></div><div><label class="block text-sm font-medium text-slate-400 mb-1">LinkedIn Profile</label><input onkeyup="updatePreview()" id="resume-linkedin" type="text" placeholder="linkedin.com/in/you" class="resume-input"></div></div></div>
-                            <div class="form-section-card"><h3 class="text-xl font-bold text-slate-100 mb-4">Professional Summary</h3><textarea onkeyup="updatePreview()" id="resume-summary" rows="4" class="resume-input" placeholder="A brief, impactful summary of your career..."></textarea></div>
-                            <div class="form-section-card" id="work-experience-section"><h3 class="text-xl font-bold text-slate-100 mb-4">Work Experience</h3><div id="work-experience-forms" class="space-y-6"></div><button id="add-experience-btn" class="mt-4 btn-secondary px-4 py-2 rounded-lg text-sm"><i class="fas fa-plus mr-2"></i>Add Experience</button></div>
-                            <div class="form-section-card" id="education-section"><h3 class="text-xl font-bold text-slate-100 mb-4">Education</h3><div id="education-forms" class="space-y-6"></div><button id="add-education-btn" class="mt-4 btn-secondary px-4 py-2 rounded-lg text-sm"><i class="fas fa-plus mr-2"></i>Add Education</button></div>
-                            <div class="form-section-card"><h3 class="text-xl font-bold text-slate-100 mb-4">Skills</h3><textarea onkeyup="updatePreview()" id="resume-skills" class="resume-input" placeholder="List your key skills, separated by commas..."></textarea></div>
-                            <button id="download-resume-btn" class="w-full btn-primary text-white font-bold px-8 py-4 rounded-xl text-lg"><span class="btn-text-resume"><i class="fas fa-download mr-2"></i>Download as PDF</span></button>
+                            <div class="form-section-card">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h3 class="text-xl font-bold text-slate-100">Your Resume</h3>
+                                    <label class="btn-secondary px-3 py-2 rounded-lg cursor-pointer">
+                                        <i class="fas fa-file-upload mr-2"></i>Upload PDF/TXT
+                                        <input id="resume-file-input" type="file" accept=".pdf,.txt" class="hidden">
+                                    </label>
+                                </div>
+                                <textarea id="resume-text" rows="12" class="resume-input" placeholder="Paste your resume text here (recommended for best accuracy)..."></textarea>
+                                <p id="resume-file-name" class="text-xs text-slate-500 mt-2"></p>
+                            </div>
+                            <div class="form-section-card">
+                                <h3 class="text-xl font-bold text-slate-100 mb-3">Job Description</h3>
+                                <textarea id="job-text" rows="10" class="resume-input" placeholder="Paste the job description here..."></textarea>
+                            </div>
+                            <div class="flex flex-wrap gap-3">
+                                <label class="flex items-center gap-2 text-slate-300"><input id="use-ai-suggestions" type="checkbox" class="accent-indigo-500" checked>Use AI suggestions</label>
+                                <button id="scan-btn" class="btn-primary text-white px-6 py-3 rounded-xl font-bold"><i class="fas fa-search mr-2"></i>Scan Resume</button>
+                            </div>
                         </div>
-                        <div class="sticky top-24 h-[80vh] overflow-y-auto" id="resume-preview-wrapper"><div id="resume-preview"></div></div>
+
+                        <div id="ats-results" class="space-y-6">
+                            <div class="glass-card p-6">
+                                <h3 class="text-xl font-bold text-slate-100 mb-4">ATS Match Score</h3>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 items-center">
+                                    <div class="sm:col-span-1">
+                                        <canvas id="atsScoreChart" height="180"></canvas>
+                                    </div>
+                                    <div class="sm:col-span-2 space-y-3">
+                                        <p id="ats-score-summary" class="text-slate-300">Run a scan to see your score.</p>
+                                        <ul id="ats-strengths" class="list-disc list-inside text-emerald-300 text-sm"></ul>
+                                        <ul id="ats-issues" class="list-disc list-inside text-amber-300 text-sm"></ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="glass-card p-6">
+                                <h3 class="text-xl font-bold text-slate-100 mb-4">Keyword Coverage</h3>
+                                <div class="grid sm:grid-cols-2 gap-6">
+                                    <div>
+                                        <h4 class="font-semibold text-slate-200 mb-2">Matched</h4>
+                                        <div id="matched-keywords" class="flex flex-wrap gap-2"></div>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-200 mb-2">Missing</h4>
+                                        <div id="missing-keywords" class="flex flex-wrap gap-2"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="glass-card p-6">
+                                <h3 class="text-xl font-bold text-slate-100 mb-4">Actionable Suggestions</h3>
+                                <ol id="ats-suggestions" class="list-decimal list-inside text-slate-300 space-y-2"></ol>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
         </main>
 
         <footer class="bg-slate-950/80 text-white border-t border-slate-800">
-             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"><div class="text-center text-slate-500 text-sm"><p>&copy; 2025 CareerBridge. All rights reserved.</p></div></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-10">
+                    <div class="lg:col-span-1">
+                        <a href="../index.html" class="text-2xl font-black gradient-text mb-4 inline-block">CareerBridge</a>
+                        <p class="text-slate-400 text-sm">Your career growth partner, connecting talent with opportunity across India.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-100 mb-4 tracking-wider">Quick Links</h4>
+                        <ul class="space-y-3">
+                            <li><a href="about.html" class="text-slate-400 hover:text-white transition-colors">About Us</a></li>
+                            <li><a href="jobs.html" class="text-slate-400 hover:text-white transition-colors">Jobs</a></li>
+                            <li><a href="resources.html" class="text-slate-400 hover:text-white transition-colors">Resources</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-100 mb-4 tracking-wider">Legal</h4>
+                        <ul class="space-y-3">
+                            <li><a href="#" class="text-slate-400 hover:text-white transition-colors">Privacy Policy</a></li>
+                            <li><a href="#" class="text-slate-400 hover:text-white transition-colors">Terms of Service</a></li>
+                            <li><a href="#" class="text-slate-400 hover:text-white transition-colors">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-100 mb-4 tracking-wider">Connect With Us</h4>
+                        <div class="flex space-x-5">
+                            <a href="#" aria-label="Twitter" class="text-slate-400 hover:text-white text-xl transition-colors"><i class="fab fa-twitter"></i></a>
+                            <a href="#" aria-label="LinkedIn" class="text-slate-400 hover:text-white text-xl transition-colors"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" aria-label="GitHub" class="text-slate-400 hover:text-white text-xl transition-colors"><i class="fab fa-github"></i></a>
+                            <a href="#" aria-label="Instagram" class="text-slate-400 hover:text-white text-xl transition-colors"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-slate-800 pt-8 text-center text-slate-500">
+                    <p>&copy; 2025 CareerBridge. All rights reserved.</p>
+                </div>
+            </div>
         </footer>
     </div>
 
@@ -263,23 +369,43 @@ document.addEventListener('DOMContentLoaded', () => {
         aiResultsContainer.innerHTML = `<div class="glass-card p-8 text-center text-slate-400">Generating AI insights... This may take a moment.</div>`;
         aiResultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-        const apiKey = "AIzaSyCvr42HndmFLcdzWo4NAHnX-2Tfhg5E-Zk";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        // Updated API key - Using Gemini 2.0 Flash Experimental
+        const apiKey = "AIzaSyBLmEGSZai1zOtoH7zu4kKZprTUXu6IgAQ";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`;
 
         const prompt = `Generate a career plan for a ${currentRole} in India aiming to become a ${nextRole}. Respond ONLY with a single, clean JSON object. The JSON must have this exact structure: {"summary": "A brief, one-sentence summary of the career transition.", "skillScores": { "labels": ["Skill 1", "Skill 2", "Skill 3", "Skill 4"], "score": [/* 4 numbers between 1-10 */] }, "salaryProjection": { "labels": ["Year 1", "Year 2", "Year 3", "Year 4", "Year 5"], "salary": [/* 5 numbers for salary in LPA */] }, "technicalSkills": [ {"name": "Skill Name", "description": "...", "icon": "fa-solid fa-some-icon"} ], "softSkills": [ {"name": "Skill Name", "description": "...", "icon": "fa-solid fa-some-icon"} ], "actionPlan": [ {"step": "Months 1-3", "action": "...", "icon": "fa-solid fa-some-icon"} ] }`;
         const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }], safetySettings: [{ category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },{ category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },{ category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },{ category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }]};
 
         try {
             const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            if (!response.ok) { throw new Error(`API error: ${response.status} ${response.statusText}. Check your API key and quota.`); }
+            if (!response.ok) { 
+                const errorText = await response.text();
+                throw new Error(`API error: ${response.status}. Please update your Google Gemini API key. Get one free at: https://makersuite.google.com/app/apikey`); 
+            }
             const result = await response.json();
             if (result.candidates && result.candidates[0].content.parts) {
                 const cleanedJsonText = result.candidates[0].content.parts[0].text.replace(/```json/g, '').replace(/```/g, '').trim();
                 renderAIResults(currentRole, nextRole, JSON.parse(cleanedJsonText));
             } else { throw new Error("Invalid AI response structure. The model may be blocked or returning an unexpected format."); }
         } catch (error) {
-            console.error("Error fetching AI advice:", error);
-            aiResultsContainer.innerHTML = `<div class="glass-card p-8 text-center text-red-400"><strong>Error:</strong> ${error.message}</div>`;
+            aiResultsContainer.innerHTML = `
+                <div class="glass-card p-8 text-center">
+                    <div class="text-red-400 mb-4">
+                        <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">AI Feature Unavailable</h3>
+                        <p class="mb-4">${error.message}</p>
+                    </div>
+                    <div class="text-slate-400 text-sm">
+                        <p class="mb-2"><strong>To enable this feature:</strong></p>
+                        <ol class="text-left max-w-md mx-auto space-y-2">
+                            <li>1. Visit <a href="https://makersuite.google.com/app/apikey" target="_blank" class="text-indigo-400 hover:underline">Google AI Studio</a></li>
+                            <li>2. Get your free API key (Google account required)</li>
+                            <li>3. Replace the API key in resources.html (line 266)</li>
+                            <li>4. Refresh this page</li>
+                        </ol>
+                    </div>
+                </div>
+            `;
         } finally {
             getAdviceBtn.disabled = false;
             btnText.textContent = 'Generate My Career Plan';
@@ -342,72 +468,177 @@ document.addEventListener('DOMContentLoaded', () => {
         tabs.forEach(tab => { tab.addEventListener('click', () => { tabs.forEach(t => t.classList.remove('active')); tab.classList.add('active'); const target = tab.dataset.tab; contents.forEach(content => content.classList.toggle('hidden', content.id !== `${target}-content`)); }); });
     }
     
-    // --- RESUME BUILDER LOGIC ---
-    const addExperienceBtn = document.getElementById('add-experience-btn');
-    const addEducationBtn = document.getElementById('add-education-btn');
-    const workExperienceForms = document.getElementById('work-experience-forms');
-    const educationForms = document.getElementById('education-forms');
-    const downloadResumeBtn = document.getElementById('download-resume-btn');
-    const resumePreview = document.getElementById('resume-preview');
-    
-    function addExperienceForm() {
-        const div = document.createElement('div');
-        div.className = 'p-4 border border-slate-700 rounded-lg space-y-3 relative dynamic-entry experience-entry';
-        div.innerHTML = `<button class="remove-btn absolute top-2 right-2 btn-danger p-1 rounded-full w-6 h-6 flex items-center justify-center text-xs" title="Remove"><i class="fas fa-times"></i></button><input onkeyup="updatePreview()" type="text" placeholder="Job Title" class="resume-input text-sm"><input onkeyup="updatePreview()" type="text" placeholder="Company" class="resume-input text-sm"><input onkeyup="updatePreview()" type="text" placeholder="Dates (e.g., Jan 2020 - Present)" class="resume-input text-sm"><textarea onkeyup="updatePreview()" placeholder="Key responsibilities (one per line)..." rows="3" class="resume-input text-sm"></textarea>`;
-        workExperienceForms.appendChild(div);
+    // --- ATS SCANNER LOGIC ---
+    if (window.pdfjsLib) {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
     }
-    function addEducationForm() {
-        const div = document.createElement('div');
-        div.className = 'p-4 border border-slate-700 rounded-lg space-y-3 relative dynamic-entry education-entry';
-        div.innerHTML = `<button class="remove-btn absolute top-2 right-2 btn-danger p-1 rounded-full w-6 h-6 flex items-center justify-center text-xs" title="Remove"><i class="fas fa-times"></i></button><input onkeyup="updatePreview()" type="text" placeholder="Degree or Certificate" class="resume-input text-sm"><input onkeyup="updatePreview()" type="text" placeholder="School or University" class="resume-input text-sm"><input onkeyup="updatePreview()" type="text" placeholder="Dates (e.g., Aug 2016 - May 2020)" class="resume-input text-sm">`;
-        educationForms.appendChild(div);
+
+    const resumeFileInput = document.getElementById('resume-file-input');
+    const resumeTextEl = document.getElementById('resume-text');
+    const jobTextEl = document.getElementById('job-text');
+    const scanBtn = document.getElementById('scan-btn');
+    const useAIEl = document.getElementById('use-ai-suggestions');
+
+    const scoreChartCanvas = document.getElementById('atsScoreChart');
+    let scoreChart = null;
+
+    const matchedEl = document.getElementById('matched-keywords');
+    const missingEl = document.getElementById('missing-keywords');
+    const strengthsEl = document.getElementById('ats-strengths');
+    const issuesEl = document.getElementById('ats-issues');
+    const suggestionsEl = document.getElementById('ats-suggestions');
+    const scoreSummaryEl = document.getElementById('ats-score-summary');
+
+    const STOPWORDS = new Set(['the','and','for','with','that','this','you','your','are','our','from','will','have','has','into','over','under','above','below','not','but','or','as','of','to','in','on','at','an','a','be','is','by','we','they','it','their','his','her','them']);
+
+    function normalize(text){
+        return (text || '').toLowerCase().replace(/[^a-z0-9\.\+\-\/# ]+/g,' ');
     }
-    document.getElementById('resume-builder').addEventListener('click', function(e) { if (e.target.closest('.remove-btn')) { e.target.closest('.dynamic-entry').remove(); updatePreview(); } });
-    window.updatePreview = function() {
-        const name = document.getElementById('resume-name').value;
-        const email = document.getElementById('resume-email').value;
-        const phone = document.getElementById('resume-phone').value;
-        let linkedin = document.getElementById('resume-linkedin').value;
-        if (linkedin && !linkedin.startsWith('http')) { linkedin = `https://${linkedin}`; }
-        const summary = document.getElementById('resume-summary').value;
-        const skills = document.getElementById('resume-skills').value;
-        let contactHtml = '';
-        if (email) contactHtml += `<div class="contact-item"><span>${email}</span><i class="fas fa-envelope"></i></div>`;
-        if (phone) contactHtml += `<div class="contact-item"><span>${phone}</span><i class="fas fa-phone-alt"></i></div>`;
-        if (linkedin) contactHtml += `<div class="contact-item"><a href="${linkedin}" target="_blank">${document.getElementById('resume-linkedin').value}</a><i class="fab fa-linkedin"></i></div>`;
-        let experienceHtml = '';
-        document.querySelectorAll('.experience-entry').forEach(entry => {
-            const [title, company, dates, desc] = Array.from(entry.querySelectorAll('input, textarea')).map(i => i.value);
-            if (title || company) { const descItems = desc.split('\n').filter(line => line.trim() !== '').map(item => `<li>${item}</li>`).join(''); experienceHtml += `<div class="mb-4 experience-item"><h3>${title}</h3><p><span>${company}</span><span class="float-right font-normal">${dates}</span></p><ul>${descItems}</ul></div>`; }
+
+    function extractKeywords(text){
+        const tokens = normalize(text).split(/\s+/).filter(w => w.length > 2 && !STOPWORDS.has(w));
+        const freq = {};
+        for (const t of tokens){ freq[t] = (freq[t]||0)+1; }
+        const sorted = Object.entries(freq).sort((a,b)=>b[1]-a[1]).map(([w])=>w);
+        // Heuristic: top 40 keywords max
+        return sorted.slice(0,40);
+    }
+
+    function computeScore(resume, jd){
+        const resumeNorm = normalize(resume);
+        const jdKeywords = extractKeywords(jd);
+        const matched = [];
+        const missing = [];
+        jdKeywords.forEach(k => (resumeNorm.includes(k) ? matched : missing).push(k));
+
+        // Signals
+        const hasEmail = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i.test(resume);
+        const hasPhone = /(\+?\d[\d\s\-\(\)]{8,}\d)/.test(resume);
+        const hasSections = ['experience','education','skills'].map(s => new RegExp(`\\b${s}\\b`,'i').test(resume));
+        const bulletCount = (resume.match(/(^|\n)\s*(\-|•|\*)\s+/g) || []).length;
+        const wordCount = (resume.match(/\b\w+\b/g) || []).length;
+
+        // Score components (0-100)
+        let score = 0;
+        const keywordScore = Math.round((matched.length / Math.max(1, matched.length + missing.length)) * 55); // weight 55
+        const sectionScore = Math.round((hasSections.filter(Boolean).length/3) * 20); // weight 20
+        const contactScore = (hasEmail?10:0) + (hasPhone?5:0); // weight 15
+        const bulletsScore = Math.min(10, bulletCount); // up to 10
+        const lengthPenalty = (wordCount < 200 || wordCount > 1200) ? -10 : 0;
+        score = Math.min(100, Math.max(0, keywordScore + sectionScore + contactScore + bulletsScore + lengthPenalty));
+
+        const strengths = [];
+        const issues = [];
+        if (matched.length >= 10) strengths.push('Strong keyword coverage.'); else issues.push('Add more keywords from the job description.');
+        if (hasEmail && hasPhone) strengths.push('Contact details present.'); else issues.push('Include both email and phone number.');
+        if (hasSections.filter(Boolean).length === 3) strengths.push('Core sections (Experience, Education, Skills) found.'); else issues.push('Add clear section headings: Experience, Education, Skills.');
+        if (bulletCount >= 8) strengths.push('Good use of bullet points.'); else issues.push('Use 8–15 concise bullet points for achievements.');
+        if (wordCount >= 350 && wordCount <= 900) strengths.push('Good overall length.'); else issues.push('Keep resume between 350–900 words for ATS readability.');
+
+        return { score, matched, missing, strengths, issues, jdKeywords };
+    }
+
+    async function extractTextFromPDF(file){
+        const data = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data }).promise;
+        let fullText = '';
+        for (let i=1;i<=pdf.numPages;i++){
+            const page = await pdf.getPage(i);
+            const content = await page.getTextContent();
+            const strings = content.items.map(it => it.str);
+            fullText += strings.join(' ') + '\n';
+        }
+        return fullText;
+    }
+
+    if (resumeFileInput){
+        resumeFileInput.addEventListener('change', async (e)=>{
+            const file = e.target.files && e.target.files[0];
+            const nameEl = document.getElementById('resume-file-name');
+            if (!file) return;
+            nameEl.textContent = `Selected: ${file.name}`;
+            try{
+                let text = '';
+                if (file.name.toLowerCase().endsWith('.pdf')){
+                    text = await extractTextFromPDF(file);
+                } else {
+                    text = await file.text();
+                }
+                resumeTextEl.value = text.trim();
+            } catch(err){
+                nameEl.textContent += ' (Failed to read file)';
+            }
         });
-        let educationHtml = '';
-        document.querySelectorAll('.education-entry').forEach(entry => {
-            const [degree, school, dates] = Array.from(entry.querySelectorAll('input')).map(i => i.value);
-            if (degree || school) { educationHtml += `<div class="mb-2 experience-item"><h3>${degree}</h3><p><span>${school}</span><span class="float-right font-normal">${dates}</span></p></div>`; }
+    }
+
+    function renderChips(container, items, color){
+        container.innerHTML = '';
+        items.forEach(k => {
+            const span = document.createElement('span');
+            span.className = `inline-block text-xs px-3 py-1 rounded-full border ${color==='good'?'border-emerald-400 text-emerald-300':'border-amber-400 text-amber-300'} bg-slate-800`;
+            span.textContent = k;
+            container.appendChild(span);
         });
-        let skillsHtml = skills.split(',').map(skill => skill.trim()).filter(s => s).map(s => `<span class="inline-block bg-slate-800 text-slate-300 text-sm font-medium mr-2 mb-2 px-3 py-1 rounded-full">${s}</span>`).join('');
-        resumePreview.innerHTML = `<header class="resume-header"><div><h1 class="resume-name">${name || 'Your Name'}</h1></div><div class="resume-contact">${contactHtml}</div></header><section>${summary ? `<h2 class="resume-section-title">Summary</h2><p class="text-sm leading-relaxed">${summary}</p>` : ''}</section><section class="mt-4">${experienceHtml ? `<h2 class="resume-section-title">Experience</h2>${experienceHtml}` : ''}</section><section class="mt-4">${educationHtml ? `<h2 class="resume-section-title">Education</h2>${educationHtml}` : ''}</section><section class="mt-4 skills-container">${skillsHtml ? `<h2 class="resume-section-title">Skills</h2><div class="pt-2">${skillsHtml}</div>` : ''}</section>`;
     }
-    function handleResumeDownload(e) {
-        const btn = e.currentTarget;
-        const btnTextEl = btn.querySelector('.btn-text-resume');
-        const originalText = btnTextEl.innerHTML;
-        btn.disabled = true;
-        btnTextEl.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Downloading...`;
-        const resumeWrapper = document.getElementById('resume-preview-wrapper');
-        const resumeElement = document.getElementById('resume-preview');
-        const name = document.getElementById('resume-name').value || 'resume';
-        const originalWrapperClasses = resumeWrapper.className;
-        resumeWrapper.className = 'bg-slate-900 p-8';
-        const opt = { margin: 0.3, filename: `${name.replace(' ', '_')}_Resume.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#0f172a' }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } };
-        html2pdf().from(resumeElement).set(opt).save().then(() => { resumeWrapper.className = originalWrapperClasses; btn.disabled = false; btnTextEl.innerHTML = originalText; });
+
+    function renderScore(score){
+        if (!scoreChartCanvas) return;
+        if (scoreChart) scoreChart.destroy();
+        scoreChart = new Chart(scoreChartCanvas.getContext('2d'),{
+            type:'doughnut',
+            data:{ labels:['Score','Gap'], datasets:[{ data:[score, 100-score], backgroundColor:['#22c55e','#1f2937'], borderWidth:0 }]},
+            options:{ cutout:'70%', plugins:{ legend:{display:false}, tooltip:{enabled:false} } }
+        });
+        scoreSummaryEl.textContent = `Estimated ATS match: ${score}%`;
     }
-    if(addExperienceBtn) addExperienceBtn.addEventListener('click', addExperienceForm);
-    if(addEducationBtn) addEducationBtn.addEventListener('click', addEducationForm);
-    if(downloadResumeBtn) downloadResumeBtn.addEventListener('click', handleResumeDownload);
-    addExperienceForm();
-    addEducationForm();
-    updatePreview();
+
+    async function aiSuggestions(resume, jd){
+        try{
+            const apiKey = "AIzaSyBLmEGSZai1zOtoH7zu4kKZprTUXu6IgAQ";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`;
+            const prompt = `You are an ATS coach. Review the RESUME against the JOB DESCRIPTION. Reply with ONLY valid JSON: {"suggestions": ["..."], "criticalMissingKeywords": ["..."], "summary": "..."}` +
+            `\nRESUME:\n${resume.substring(0,9000)}\nJOB DESCRIPTION:\n${jd.substring(0,9000)}`;
+            const payload = { contents: [{ role: 'user', parts: [{ text: prompt }]}] };
+            const resp = await fetch(apiUrl,{method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+            if (!resp.ok) throw new Error('AI request failed');
+            const result = await resp.json();
+            const txt = result?.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+            const clean = txt.replace(/```json|```/g,'');
+            return JSON.parse(clean);
+        }catch{
+            return null;
+        }
+    }
+
+    async function runScan(){
+        const resume = (resumeTextEl?.value || '').trim();
+        const jd = (jobTextEl?.value || '').trim();
+        if (!resume || !jd){ alert('Please provide both Resume text and Job Description.'); return; }
+
+        const base = computeScore(resume, jd);
+        renderScore(base.score);
+        renderChips(matchedEl, base.matched, 'good');
+        renderChips(missingEl, base.missing, 'bad');
+        strengthsEl.innerHTML = base.strengths.map(s=>`<li>${s}</li>`).join('');
+        issuesEl.innerHTML = base.issues.map(s=>`<li>${s}</li>`).join('');
+        suggestionsEl.innerHTML = '';
+
+        if (useAIEl && useAIEl.checked){
+            const ai = await aiSuggestions(resume, jd);
+            if (ai){
+                if (Array.isArray(ai.criticalMissingKeywords)){
+                    const extraMissing = ai.criticalMissingKeywords.filter(k => !base.matched.includes(k));
+                    if (extraMissing.length) renderChips(missingEl, Array.from(new Set([...base.missing, ...extraMissing])), 'bad');
+                }
+                if (Array.isArray(ai.suggestions)){
+                    suggestionsEl.innerHTML = ai.suggestions.map(s=>`<li>${s}</li>`).join('');
+                }
+                if (ai.summary){ scoreSummaryEl.textContent += ` — ${ai.summary}`; }
+            }
+        }
+    }
+
+    if (scanBtn) scanBtn.addEventListener('click', runScan);
 });
 </script>
 </body>

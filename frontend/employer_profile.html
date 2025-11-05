@@ -64,7 +64,7 @@
         <nav class="sticky top-0 left-0 right-0 z-50 nav-blur">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
-                    <a href="/careerbridge/index.html" class="text-2xl font-black gradient-text">CareerBridge</a>
+                    <a href="../index.html" class="text-2xl font-black gradient-text">CareerBridge</a>
                     <div class="hidden md:block">
                         <div id="nav-links" class="flex items-center space-x-8"></div>
                     </div>
@@ -88,7 +88,7 @@
                 <div>
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-3xl font-bold text-slate-100">Your Posted Jobs</h2>
-                        <a href="/CareerBridge/frontend/components/post-Job.html" class="btn-primary text-white font-bold px-6 py-3 rounded-lg">
+                        <a href="components/post-Job.html" class="btn-primary text-white font-bold px-6 py-3 rounded-lg">
                             <i class="fas fa-plus mr-2"></i>Post New Job
                         </a>
                     </div>
@@ -102,7 +102,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-10">
                     <div class="lg:col-span-1">
-                        <a href="index.html" class="text-2xl font-black gradient-text mb-4 inline-block">CareerBridge</a>
+                        <a href="../index.html" class="text-2xl font-black gradient-text mb-4 inline-block">CareerBridge</a>
                         <p class="text-slate-400 text-sm">Your career growth partner, connecting talent with opportunity across India.</p>
                     </div>
                     <div>
@@ -110,7 +110,6 @@
                         <ul class="space-y-3">
                             <li><a href="about.html" class="text-slate-400 hover:text-white transition-colors">About Us</a></li>
                             <li><a href="jobs.html" class="text-slate-400 hover:text-white transition-colors">Jobs</a></li>
-                            <li><a href="#" class="text-slate-400 hover:text-white transition-colors">Companies</a></li>
                             <li><a href="resources.html" class="text-slate-400 hover:text-white transition-colors">Resources</a></li>
                         </ul>
                     </div>
@@ -221,7 +220,7 @@
                     const profileLink = isEmployer ? 'employer_profile.html' : 'profile.html';
 
                     if (isEmployer) {
-                        navHtml += `<a href="/CareerBridge/frontend/components/post-job.html" class="text-slate-400 hover:text-white font-medium">Post Job</a>`;
+                        navHtml += `<a href="components/post-job.html" class="text-slate-400 hover:text-white font-medium">Post Job</a>`;
                     }
                     
                     navHtml += `
@@ -291,10 +290,10 @@
                             <p><strong class="text-slate-500">Applications:</strong> <span class="font-bold text-indigo-300 text-base">${job.application_count}</span></p>
                         </div>
                         <div class="mt-4 pt-4 border-t border-slate-700 flex justify-between items-center">
-                            <a href="/CareerBridge/frontend/components/view_applications.html?job_id=${job.id}" class="text-indigo-400 hover:text-indigo-300 font-semibold text-sm">
+                            <a href="components/view_applications.html?job_id=${job.id}" class="text-indigo-400 hover:text-indigo-300 font-semibold text-sm">
                                 View Applications <i class="fas fa-arrow-right ml-1"></i>
                             </a>
-                            <a href="/CareerBridge/frontend/components/edit-job.html?job_id=${job.id}" class="text-slate-400 hover:text-white font-semibold text-sm">
+                            <a href="components/edit-job.html?job_id=${job.id}" class="text-slate-400 hover:text-white font-semibold text-sm">
                                 <i class="fas fa-pencil-alt mr-1"></i> Edit
                             </a>
                         </div>
