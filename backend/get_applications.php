@@ -37,7 +37,7 @@ try {
     $job_check_stmt->close();
 
     $stmt = $conn->prepare(
-        "SELECT u.id as applicant_id, u.full_name, u.email, a.resume_path, a.application_date
+        "SELECT a.id as application_id, u.id as applicant_id, u.full_name, u.email, a.resume_path, a.application_date, a.status
          FROM applications a
          JOIN users u ON a.user_id = u.id
          WHERE a.job_id = ?

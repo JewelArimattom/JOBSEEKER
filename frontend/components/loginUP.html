@@ -8,37 +8,80 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
-        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .nav-blur { backdrop-filter: blur(20px); background: rgba(255, 255, 255, 0.95); border-bottom: 1px solid #e2e8f0; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #020617; /* bg-slate-950 */
+            color: #cbd5e1;
+        }
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+        .gradient-text { background: linear-gradient(135deg, #a7b2f5 0%, #cda3f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .nav-blur { 
+            backdrop-filter: blur(16px); 
+            background: rgba(15, 23, 42, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
         .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3); }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4); }
-        .signup-card { background-color: white; border-radius: 1.5rem; box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
-        .form-input { width: 100%; border: 2px solid #e2e8f0; border-radius: 0.75rem; padding: 0.75rem 1rem 0.75rem 2.5rem; transition: all 0.3s ease; }
-        .form-input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); outline: none; }
-        .form-label { font-weight: 600; color: #334155; margin-bottom: 0.5rem; display: block; }
+        .signup-card { 
+            background: rgba(30, 41, 59, 0.8); /* bg-slate-800 with alpha */
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.3);
+        }
+        .form-input { 
+            width: 100%; 
+            background: rgba(15, 23, 42, 0.5); 
+            border: 2px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 0.75rem; 
+            padding: 0.75rem 1rem 0.75rem 2.5rem; 
+            color: #f1f5f9;
+            transition: all 0.3s ease; 
+        }
+        .form-input:focus { 
+            border-color: #6366f1; 
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); 
+            outline: none; 
+            background: #0f172a;
+        }
+        .form-input::placeholder { color: #64748b; }
+        .form-label { font-weight: 600; color: #cbd5e1; margin-bottom: 0.5rem; display: block; }
         .social-btn { transition: all 0.3s ease; }
-        .social-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .social-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body class="text-slate-800">
-    <nav class="sticky top-0 left-0 right-0 z-50 nav-blur">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0">
-                    <a href="../../index.html" class="text-2xl font-black gradient-text">CareerBridge</a>
+    <canvas id="particles-canvas"></canvas>
+    
+    <div class="content-wrapper">
+        <nav class="sticky top-0 left-0 right-0 z-50 nav-blur">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex-shrink-0">
+                        <a href="../../index.html" class="text-2xl font-black gradient-text">CareerBridge</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    <main class="min-h-screen flex items-center justify-center py-16 md:py-24">
-        <div class="max-w-md w-full mx-auto px-4">
-            <div class="signup-card p-8 md:p-10">
-                <div class="text-center mb-8">
-                    <h1 class="text-3xl font-black text-slate-900">Create an Account</h1>
-                    <p class="text-slate-500 mt-2">Join CareerBridge to start your career journey.</p>
-                </div>
+        <main class="min-h-screen flex items-center justify-center py-16 md:py-24">
+            <div class="max-w-md w-full mx-auto px-4">
+                <div class="signup-card p-8 md:p-10">
+                    <div class="text-center mb-8">
+                        <h1 class="text-3xl font-black text-slate-100">Create an Account</h1>
+                        <p class="text-slate-400 mt-2">Join CareerBridge to start your career journey.</p>
+                    </div>
                 <form action="../../backend/register_handler.php" method="POST" class="space-y-6">
                     <div>
                         <label for="fullname" class="form-label">Full Name</label>
@@ -66,11 +109,11 @@
                         <div class="flex items-center space-x-4">
                             <label class="flex items-center">
                                 <input type="radio" name="user_type" value="jobseeker" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300" checked>
-                                <span class="ml-2 text-slate-700">Job Seeker</span>
+                                <span class="ml-2 text-slate-300">Job Seeker</span>
                             </label>
                             <label class="flex items-center">
                                 <input type="radio" name="user_type" value="employer" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300">
-                                <span class="ml-2 text-slate-700">Job Provider</span>
+                                <span class="ml-2 text-slate-300">Job Provider</span>
                             </label>
                         </div>
                     </div>
@@ -79,13 +122,86 @@
                     </div>
                 </form>
                 <div class="mt-8 text-center">
-                    <p class="text-sm text-slate-600">
+                    <p class="text-sm text-slate-400">
                         Already have an account?
-                        <a href="signUp.html" class="font-bold text-indigo-600 hover:underline">Sign In</a>
+                        <a href="signUp.html" class="font-bold text-indigo-400 hover:text-indigo-300">Sign In</a>
                     </p>
                 </div>
             </div>
         </div>
     </main>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Floating Particles / Constellation Effect ---
+        const canvas = document.getElementById('particles-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            
+            const setup = () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                particles = [];
+                const particleCount = Math.floor(canvas.width * canvas.height / 20000);
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
+            };
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = Math.random() - 0.5;
+                    this.vy = Math.random() - 0.5;
+                    this.radius = Math.random() * 1.5 + 1;
+                    this.color = 'rgba(167, 178, 245, 0.8)';
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                }
+            }
+            
+            function connectParticles() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i; j < particles.length; j++) {
+                        const dist = Math.sqrt(Math.pow(particles[i].x - particles[j].x, 2) + Math.pow(particles[i].y - particles[j].y, 2));
+                        if (dist < 100) {
+                            const opacity = 1 - (dist / 100);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(167, 178, 245, ${opacity})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => { p.update(); p.draw(); });
+                connectParticles();
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', setup);
+            setup();
+            animate();
+        }
+    });
+    </script>
 </body>
 </html>
