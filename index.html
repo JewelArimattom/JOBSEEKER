@@ -570,16 +570,31 @@
                     listingsContainer.innerHTML = '<p class="text-slate-400 col-span-4 text-center">No jobs found at the moment.</p>';
                     return;
                 }
-               jobs.forEach(job => {
+                jobs.forEach(job => {
                     const companyInitial = job.company ? job.company.charAt(0).toUpperCase() : 'J';
                     const placeholderColors = ['667eea', '764ba2', '34d399', 'fbbf24', 'f87171', '60a5fa'];
                     const randomColor = placeholderColors[job.id % placeholderColors.length];
-                    const logoSrc = (job.logo && !job.logo.endsWith('/')) ? job.logo : `https://placehold.co/100x100/${randomColor}/ffffff?text=${companyInitial}&font=inter`;
+                    const placeholder = `https://placehold.co/100x100/${randomColor}/ffffff?text=${companyInitial}&font=inter`;
+                    let logoSrc = placeholder;
+
+                    if (job.logo && typeof job.logo === 'string' && job.logo.trim() !== '') {
+                        const raw = job.logo.trim();
+                        if (/^https?:\/\//i.test(raw) || raw.startsWith('/')) {
+                            logoSrc = raw;
+                        } else {
+                            // Clean leading ../ or ./ segments then use basename within expected uploads folder
+                            const cleaned = raw.replace(/^(\.+\/)+/, '').replace(/^\//, '');
+                            const basename = cleaned.split('/').pop();
+                            // Prefer the standard uploads location under frontend/uploads
+                            logoSrc = `frontend/uploads/${basename}`;
+                        }
+                    }
+
                     const salary = job.salary || 'Not Disclosed';
                     const jobCard = `
                     <div class="job-card p-6 reveal-on-scroll">
                         <div class="flex items-start space-x-4 mb-4">
-                            <img src="${logoSrc}" alt="${job.company}" class="w-12 h-12 rounded-xl object-contain shadow-md bg-white">
+                            <img src="${logoSrc}" alt="${job.company}" class="w-12 h-12 rounded-xl object-cover shadow-md bg-slate-800" onerror="this.onerror=null;this.src='${placeholder}';">
                             <div class="flex-1 min-w-0">
                                 <h3 class="font-bold text-slate-100 text-lg mb-1 truncate">${job.title}</h3>
                                 <p class="text-slate-400 text-sm truncate">${job.company}</p>
