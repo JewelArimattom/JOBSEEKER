@@ -82,22 +82,39 @@ To run this project locally, you will need a server environment like XAMPP or WA
 
 3.  **Database Setup:**
     - Open **phpMyAdmin** from your XAMPP/WAMP control panel.
-    - Create a new database named `jobfinder`.
-    - Import the provided `.sql` file into the `jobfinder` database to create the necessary tables (`users`, `jobs`, `applications`, etc.).
+  - Import `backend/database_schema.sql`.
+  - This creates the `jobfinder` database and all required tables (`users`, `roles`, `user_roles`, `jobs`, `applications`, `messages`).
 
 4.  **Configure Database Connection:**
-    - Open each PHP file in the `backend/` directory.
-    - Verify that the database credentials at the top of each file match your local MySQL setup (the default is usually correct for a standard XAMPP installation).
-    ```php
-    $servername = "127.0.0.1";
-    $username = "root";
-    $password = "";
-    $dbname = "jobfinder";
-    ```
+  - Copy `.env.example` to `.env` in the project root.
+  - Update values for your local machine or hosting provider:
+  ```env
+  APP_ENV=production
+  APP_DEBUG=false
+  APP_TIMEZONE=Asia/Kolkata
+
+  DB_HOST=localhost
+  DB_PORT=3306
+  DB_DATABASE=jobfinder
+  DB_USERNAME=root
+  DB_PASSWORD=
+  ```
 
 5.  **Run the project:**
     - Start the Apache and MySQL services from your XAMPP/WAMP control panel.
     - Open your web browser and navigate to: `http://localhost/CareerBridge/frontend/`
+
+## Online Hosting Checklist
+
+1.  Upload project files to your hosting root (for example, `public_html/CareerBridge`).
+2.  Create a MySQL database and user from your hosting control panel.
+3.  Import `backend/database_schema.sql` into the new database.
+4.  Create `.env` from `.env.example` and set production credentials.
+5.  Ensure web server can write to upload folders:
+  - `frontend/uploads/`
+  - `frontend/resumes/`
+6.  Verify PHP extensions are enabled: `mysqli`, `json`, `mbstring`, `fileinfo`.
+7.  Set `APP_DEBUG=false` in production.
 
 ## Usage
 

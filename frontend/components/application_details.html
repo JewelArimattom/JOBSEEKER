@@ -53,7 +53,7 @@
         <nav class="sticky top-0 left-0 right-0 z-50 nav-blur">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
-                    <a href="../index.html" class="text-2xl font-black gradient-text">CareerBridge</a>
+                    <a href="../../index.html" class="text-2xl font-black gradient-text">CareerBridge</a>
                     <div class="hidden md:block">
                         <div id="nav-links" class="flex items-center space-x-8"></div>
                     </div>
@@ -128,7 +128,7 @@
                 const authData = await authResponse.json();
 
                 if (authData.loggedin) {
-                    let navHtml = '<a href="jobs.html" class="text-slate-400 hover:text-white font-medium">Jobs</a><a href="../resources.html" class="text-slate-400 hover:text-white font-medium">Resources</a><a href="../about.html" class="text-slate-400 hover:text-white font-medium">About</a>';
+                    let navHtml = '<a href="../jobs.html" class="text-slate-400 hover:text-white font-medium">Jobs</a><a href="../resources.html" class="text-slate-400 hover:text-white font-medium">Resources</a><a href="../about.html" class="text-slate-400 hover:text-white font-medium">About</a>';
                     const profileLink = authData.roles && authData.roles.includes('employer') ? 'employer_profile.html' : 'profile.html';
                     navHtml += `
                         <div class="relative" id="profile-menu-container">

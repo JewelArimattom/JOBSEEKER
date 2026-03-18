@@ -195,6 +195,11 @@ document.addEventListener('DOMContentLoaded', () => {
             document.title = `${job.job_title} - CareerBridge`;
             const companyInitial = job.company_name ? job.company_name.charAt(0).toUpperCase() : 'C';
             const logoSrc = job.company_logo_path && !job.company_logo_path.endsWith('/') ? `../../backend/${job.company_logo_path}` : `https://placehold.co/100x100/667eea/ffffff?text=${companyInitial}&font=inter`;
+            // Normalize company website URL (if provided) and ensure it has a scheme for safe linking
+            let companyUrl = job.company_website && job.company_website.trim() ? job.company_website.trim() : '';
+            if (companyUrl && !/^https?:\/\//i.test(companyUrl)) {
+                companyUrl = 'https://' + companyUrl;
+            }
             
             const headerHtml = `
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -203,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="flex-grow">
                             <h1 class="text-3xl md:text-4xl font-black text-slate-100">${job.job_title}</h1>
                             <p class="text-lg text-slate-300 mt-1">
-                                at <a href="#" class="font-bold text-indigo-400 hover:underline">${job.company_name}</a>
+                                at ${companyUrl ? `<a href="${companyUrl}" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-400 hover:underline">${job.company_name}</a>` : `<span class="font-bold text-indigo-400">${job.company_name}</span>`}
                                 <span class="text-slate-500 mx-2">•</span>
                                 <span class="text-slate-400">${job.location}</span>
                             </p>

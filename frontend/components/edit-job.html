@@ -181,7 +181,7 @@
                 if (result.success) {
                     feedbackMessage.innerHTML = `<p class="text-green-400">Job updated successfully! Redirecting...</p>`;
                     setTimeout(() => {
-                        window.location.href = 'employer_profile.html';
+                        window.location.href = '../employer_profile.html';
                     }, 2000);
                 } else {
                     throw new Error(result.message);
